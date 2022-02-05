@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.home.moviescope.R
 
 class MainActivity : AppCompatActivity() {
+ ///START
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

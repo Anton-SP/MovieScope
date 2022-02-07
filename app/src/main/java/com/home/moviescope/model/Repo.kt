@@ -1,4 +1,5 @@
-package com.home.moviescope
+package com.home.moviescope.model
+
 //Создать Object.
 object Repo {
     private val movieList: MutableList<Movie> = listOf<Movie>().toMutableList()

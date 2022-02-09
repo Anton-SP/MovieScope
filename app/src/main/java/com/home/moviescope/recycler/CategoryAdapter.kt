@@ -2,6 +2,7 @@ package com.home.moviescope.recycler
 
 import android.app.Activity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,9 +11,22 @@ import com.home.moviescope.databinding.MovieListBinding
 import com.home.moviescope.model.Category
 
 import com.home.moviescope.view.MovieFragment
+
 //адаптер для внешнего ресайклера (категорий) включает в себя адаптер для вложенного горизонтального ресайклера (фильмы)
+
 class CategoryAdapter(var categoryList: List<Category>) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+
+    interface onItemClickListener {
+        fun onItemClick(itemView: View?, position: Int)
+    }
+
+    private lateinit var listener: onItemClickListener
+
+    fun setOnItemClickListener(listener: onItemClickListener) {
+        this.listener = listener
+    }
+
 
     inner class ViewHolder(val binding: MovieListBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -22,17 +36,25 @@ class CategoryAdapter(var categoryList: List<Category>) :
             binding.movieRv.layoutManager =
                 LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
             binding.movieRv.adapter = movieAdapter
+           // movieAdapter.setOnItemClickListener()
 
-            movieAdapter.setOnItemClickListener(object : MovieAdapter.onItemClickListener {
+           /* movieAdapter.setOnItemClickListener(object : MovieAdapter.onMovieItemClickListener {
                 override fun onItemClick(position: Int) {
 
-
-                    //тут немного запутлся с обработкой нажатия на фильме
-                    //и надо бы обработчик нажатия на категорию чтобы раскрыть фильмы категории
-                    //наверно проще сделать кнопку рядом с названием категории по нажатию на которой будет открываться детальный обзор категории.
                 }
-            })
+            })*/
         }
+
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(itemView, position)
+                }
+            }
+        }
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,8 +70,5 @@ class CategoryAdapter(var categoryList: List<Category>) :
         return categoryList.size
     }
 
-   /* fun addData(list: List<Category>) {
-        categoryList = list
-        notifyDataSetChanged()
-    }*/
+
 }

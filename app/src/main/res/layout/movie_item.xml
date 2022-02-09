@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_main"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/card_main"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="10dp"
+    android:layout_margin="@dimen/standart_margin"
+    android:backgroundTint="#8FB0E8"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="12sp">
+    app:cardCornerRadius="@dimen/double_margin"
+    app:cardElevation="@dimen/movie_card_elevation">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,26 +19,21 @@
 
         <ImageView
             android:id="@+id/poster"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/movie_item_poster_width"
+            android:layout_height="@dimen/movie_item_poster_height"
             android:layout_gravity="center"
-            android:contentDescription="movie_poster"
+            android:contentDescription="@string/movie_poster_description"
             android:src="@drawable/ic_baseline_image_24" />
+
         <TextView
             android:id="@+id/movie_genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/movie_item_padding"
+            android:text="@string/test_genre"
             android:textColor="@color/black"
-            android:text="Test Horror"
-            />
-
+            android:textSize="24sp" />
 
     </LinearLayout>
-
-
-
-
 
 </androidx.cardview.widget.CardView>

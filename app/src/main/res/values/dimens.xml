@@ -2,4 +2,21 @@
 <resources>
     <dimen name="margin_min">5dp</dimen>
     <dimen name="text_filed">25dp</dimen>
+    <dimen name="category_detail_title">18sp</dimen>
+    <dimen name="standart_margin">10dp</dimen>
+    <dimen name="half_margin">5dp</dimen>
+    <dimen name="header_height">250dp</dimen>
+    <dimen name="header_size">35sp</dimen>
+    <dimen name="header_logo">100dp</dimen>
+    <dimen name="movie_poster_height">200dp</dimen>
+    <dimen name="movie_title_size">24sp</dimen>
+    <dimen name="rating_size">14sp</dimen>
+    <dimen name="genre_size">14sp</dimen>
+    <dimen name="movie_info_size">14sp</dimen>
+    <dimen name="double_margin">20dp</dimen>
+    <dimen name="movie_card_elevation">12sp</dimen>
+    <dimen name="movie_item_poster_width">100dp</dimen>
+    <dimen name="movie_item_poster_height">50dp</dimen>
+    <dimen name="movie_item_padding">10dp</dimen>
+    <dimen name="category_size">18sp</dimen>
 </resources>

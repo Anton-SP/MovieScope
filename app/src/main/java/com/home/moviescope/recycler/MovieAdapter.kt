@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.home.moviescope.databinding.MovieItemBinding
 import com.home.moviescope.model.Movie
-
+//Start
 //адаптер для вложенного ресайклера с фильмами
 open class MovieAdapter(
     var movieList: List<Movie>

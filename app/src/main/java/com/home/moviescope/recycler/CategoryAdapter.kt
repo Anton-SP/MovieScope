@@ -1,16 +1,19 @@
 package com.home.moviescope.recycler
 
-import android.app.Activity
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.home.moviescope.databinding.MovieListBinding
+import com.home.moviescope.R
+import com.home.moviescope.databinding.CategoryListBinding
 import com.home.moviescope.model.Category
-
 import com.home.moviescope.view.MovieFragment
+
 
 //адаптер для внешнего ресайклера (категорий) включает в себя адаптер для вложенного горизонтального ресайклера (фильмы)
 
@@ -22,31 +25,44 @@ class CategoryAdapter(var categoryList: List<Category>) :
     }
 
     private lateinit var listener: onItemClickListener
+    private lateinit var movieAdapter: MovieAdapter
+  //  private lateinit var allButton: androidx.appcompat.widget.AppCompatButton
+    private lateinit var allButton: TextView
+
 
     fun setOnItemClickListener(listener: onItemClickListener) {
         this.listener = listener
     }
 
 
-    inner class ViewHolder(val binding: MovieListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(val binding: CategoryListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(result: Category) {
-            binding.categoryTitle.text = result.name
-            val movieAdapter = MovieAdapter(result.members)
+        fun bind(category: Category) {
+            binding.categoryTitle.text = category.name
+            movieAdapter = MovieAdapter(category.members)
             binding.movieRv.layoutManager =
                 LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
             binding.movieRv.adapter = movieAdapter
-           // movieAdapter.setOnItemClickListener()
-
-           /* movieAdapter.setOnItemClickListener(object : MovieAdapter.onMovieItemClickListener {
-                override fun onItemClick(position: Int) {
-
+            movieAdapter.setOnItemMovieClickListener(object :
+                MovieAdapter.onMovieItemClickListener {
+                override fun onItemClick(itemView: View?, position: Int) {
+                    var movie = movieAdapter.movieList[position]
+                    //вот тут не знаю хорош ли это. контекст выдавать за активити
+                    val activity = itemView?.context as AppCompatActivity
+                    var bundle = Bundle()
+                    bundle.putParcelable(MovieFragment.MOVIE, movie)
+                    activity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, MovieFragment.newInstance(bundle))
+                        .addToBackStack(null)
+                        .commit()
                 }
-            })*/
+            })
         }
 
         init {
-            itemView.setOnClickListener {
+            allButton = binding.categoryAll
+            allButton.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     listener.onItemClick(itemView, position)
@@ -54,21 +70,23 @@ class CategoryAdapter(var categoryList: List<Category>) :
             }
         }
 
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = MovieListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = CategoryListBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CategoryAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(categoryList[position])
     }
 
     override fun getItemCount(): Int {
         return categoryList.size
     }
-
 
 }

@@ -5,27 +5,45 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.home.moviescope.R
-
+import com.home.moviescope.databinding.MovieFragmentBinding
+import com.home.moviescope.model.Movie
 
 class MovieFragment : Fragment() {
 
+    private var _binding: MovieFragmentBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
+    companion object {
+        const val MOVIE: String = "MOVIE"
+
+        @JvmStatic
+        fun newInstance(bundle: Bundle): MovieFragment {
+            val fragment = MovieFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.movie_fragment, container, false)
+        _binding = MovieFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val movie = arguments?.getParcelable<Movie>(MOVIE)
+        if (movie != null) {
+            binding.movieGenre.text = movie.genre
+            binding.movieTitle.text = movie.title
 
-        @JvmStatic
-        fun newInstance() = MovieFragment()
+        }
+
     }
+
+
 }

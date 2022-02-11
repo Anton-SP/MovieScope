@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.home.moviescope.databinding.MovieItemBinding
 import com.home.moviescope.model.Movie
+
 //Start
 //адаптер для вложенного ресайклера с фильмами
-open class MovieAdapter(
-    var movieList: List<Movie>
-) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
+class MovieAdapter(var movieList: List<Movie>) :
+    RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     interface onMovieItemClickListener {
-        fun onItemClick(itemView:View?, position: Int)
+        fun onItemClick(itemView: View?, position: Int)
     }
 
     private lateinit var movieListener: onMovieItemClickListener
@@ -24,31 +24,32 @@ open class MovieAdapter(
 
     inner class ViewHolder(val binding: MovieItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-      fun bind(movie: Movie) {
-          binding.movieGenre.text = movie.genre
-      }
+        fun bind(movie: Movie) {
+            binding.movieGenre.text = movie.genre
+        }
 
-      init {
+        init {
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-             //       movieListener.onItemClick(itemView,position)
-                    //need implementation
+                    movieListener.onItemClick(itemView, position)
                 }
-
             }
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = MovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
+        val binding = MovieItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return ViewHolder(binding)
     }
 
-    fun bind(result: Movie) {
-    }
+    /* fun bind(result: Movie) {
+     }*/
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(movieList[position])
@@ -57,9 +58,6 @@ open class MovieAdapter(
     override fun getItemCount(): Int {
         return movieList.size
     }
-
-
-
 
 
 }

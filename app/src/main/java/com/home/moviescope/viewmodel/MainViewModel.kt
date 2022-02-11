@@ -19,7 +19,7 @@ class MainViewModel(
     private fun getDataFromRemoteSource() {
         liveDataToObserver.value = AppState.Loading
         var random = (0..10).random() // generated random from 0 to 10 included
-        if (random > 5) {
+        if (random > 0) {
             Thread {
                 sleep(2000)
                 liveDataToObserver.postValue(
@@ -34,7 +34,6 @@ class MainViewModel(
                 liveDataToObserver.postValue(AppState.Error)
             }.start()
         }
-
     }
 
 }

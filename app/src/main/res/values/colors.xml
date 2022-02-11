@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#75AA4E</color>
     <color name="movie_item">#5F8DDA</color>
+    <color name="list_back">#D3051530</color>
     <color name="loadingBackground">#80FFFFFF</color>
 
 </resources>

@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +15,6 @@ import com.home.moviescope.R
 import com.home.moviescope.databinding.MainFragmentBinding
 import com.home.moviescope.model.Category
 import com.home.moviescope.recycler.CategoryAdapter
-import com.home.moviescope.recycler.MovieAdapter
 import com.home.moviescope.viewmodel.AppState
 import com.home.moviescope.viewmodel.MainViewModel
 
@@ -26,13 +25,14 @@ class MainFragment : Fragment() {
 
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var categoryList: List<Category>
+    private lateinit var categoryAll: TextView
+    private lateinit var viewModel: MainViewModel
 
 
     companion object {
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,6 +76,10 @@ class MainFragment : Fragment() {
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        val observer = Observer<AppState> { renderData(it) }
+        viewModel.getLiveData().observe(viewLifecycleOwner, observer)
+        viewModel.getCategoryFromRemoteSource()
         binding.catalogList.layoutManager = layoutManager
 
     }
@@ -85,13 +89,6 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        val observer = Observer<AppState> { renderData(it) }
-        viewModel.getLiveData().observe(viewLifecycleOwner, observer)
-        viewModel.getCategoryFromRemoteSource()
-    }
 
     private fun renderData(appState: AppState) {
         when (appState) {
@@ -122,30 +119,21 @@ class MainFragment : Fragment() {
         categoryAdapter = CategoryAdapter(categoryList)
         binding.catalogList.adapter = categoryAdapter
         //клик по категории чтбы открыть детайльный обзор
-        categoryAdapter.setOnItemClickListener(object :CategoryAdapter.onItemClickListener{
+        categoryAdapter.setOnItemClickListener(object : CategoryAdapter.onItemClickListener {
             override fun onItemClick(itemView: View?, position: Int) {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, CategoryDetailedFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit()
-
-            //  Toast.makeText(requireContext(),"click",Toast.LENGTH_SHORT).show()
+                var category = categoryAdapter.categoryList[position]
+                val manager = activity?.supportFragmentManager
+                if (manager != null) {
+                    var bundle = Bundle()
+                    bundle.putParcelable(CategoryDetailedFragment.CATEGORY_DETAIL, category)
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .add(R.id.container, CategoryDetailedFragment.newInstance(bundle))
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         })
-
-      /*  movieAdapter.setOnItemMovieClickListener(object  : MovieAdapter.onMovieItemClickListener{
-            override fun onItemClick(itemView: View?, position: Int) {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.container,MovieFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit()
-            }
-        })*/
-
-
-
     }
-
 
 
 }

@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.home.moviescope.R
 import com.home.moviescope.databinding.ActivityMainBinding
@@ -48,24 +47,39 @@ class MainActivity : AppCompatActivity() {
         navigationView.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.category_1 -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, CategoryDetailedFragment.newInstance())
-                        .addToBackStack(null)
-                        .commit()
+                    Toast.makeText(
+                        this,
+                        "SHOW CATEGORY FROM DRAWER",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    /*  supportFragmentManager.beginTransaction()
+                          .replace(R.id.container, CategoryDetailedFragment.newInstance())
+                          .addToBackStack(null)
+                          .commit()*/
+
                     return@OnNavigationItemSelectedListener true
+
                 }
                 R.id.category_2 -> {
-                    supportFragmentManager.beginTransaction()
+                    Toast.makeText(
+                        this,
+                        "SHOW CATEGORY FROM DRAWER",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    /*supportFragmentManager.beginTransaction()
                         .replace(R.id.container, CategoryDetailedFragment.newInstance())
                         .addToBackStack(null)
-                        .commit()
+                        .commit()*/
+
                     return@OnNavigationItemSelectedListener true
                 }
                 else -> {
                     return@OnNavigationItemSelectedListener false
                 }
             }
-            // false
+
         })
 
 

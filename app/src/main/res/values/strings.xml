@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MovieScope</string>
+    <string name="show_data">Show data</string>
+    <string name="cycle">Show cycle</string>
 </resources>

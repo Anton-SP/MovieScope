@@ -13,7 +13,6 @@ class MovieFragment : Fragment() {
     private var _binding: MovieFragmentBinding? = null
     private val binding get() = _binding!!
 
-
     companion object {
         const val MOVIE: String = "MOVIE"
 
@@ -40,10 +39,7 @@ class MovieFragment : Fragment() {
         if (movie != null) {
             binding.movieGenre.text = movie.genre
             binding.movieTitle.text = movie.title
-
         }
-
     }
-
 
 }

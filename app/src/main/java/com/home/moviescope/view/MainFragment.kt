@@ -22,54 +22,22 @@ class MainFragment : Fragment() {
 
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var categoryList: List<Category>
     private lateinit var categoryAll: TextView
     private lateinit var viewModel: MainViewModel
 
-
     companion object {
         fun newInstance() = MainFragment()
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = MainFragmentBinding.inflate(inflater, container, false)
-        //setTestCategory()
         return binding.root
-
     }
-    //для проверки recycler
-    /*  private fun setTestCategory() {
-          categoryList = listOf(
-              Category("Category 1",setTestMovie()),
-              Category("Category 2",setTestMovie()),
-              Category("Category 3",setTestMovie()),
-              Category("Category 4",setTestMovie()),
-              Category("Category 5",setTestMovie()),
-              Category("Category 6",setTestMovie()),
-              Category("Category 7",setTestMovie()),
-              Category("Category 8",setTestMovie())
-          )
-      }
-
-      private fun setTestMovie(): List<Movie> {
-          return listOf(
-              Movie("movie 1", "Horror"),
-              Movie("movie 2", "Comedy"),
-              Movie("movie 3", "Action"),
-              Movie("movie 4", "Bio"),
-              Movie("movie 5", "Detective"),
-              Movie("movie 6", "Drama"),
-              Movie("movie 7", "Horror"),
-              Movie("movie 8", "Action")
-          )
-      }
-  */
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,14 +49,12 @@ class MainFragment : Fragment() {
         viewModel.getLiveData().observe(viewLifecycleOwner, observer)
         viewModel.getCategoryFromRemoteSource()
         binding.catalogList.layoutManager = layoutManager
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 
     private fun renderData(appState: AppState) {
         when (appState) {
@@ -134,6 +100,4 @@ class MainFragment : Fragment() {
             }
         })
     }
-
-
 }

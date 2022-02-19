@@ -48,9 +48,6 @@ class MovieAdapter(var movieList: List<Movie>) :
         return ViewHolder(binding)
     }
 
-    /* fun bind(result: Movie) {
-     }*/
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(movieList[position])
     }
@@ -58,6 +55,5 @@ class MovieAdapter(var movieList: List<Movie>) :
     override fun getItemCount(): Int {
         return movieList.size
     }
-
 
 }

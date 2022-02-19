@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initDrawer(toolbar: Toolbar) {
-
         val drawer = binding.mainDrawer
         val toggle = ActionBarDrawerToggle(
             this, drawer, toolbar,
@@ -53,13 +52,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
-                    /*  supportFragmentManager.beginTransaction()
-                          .replace(R.id.container, CategoryDetailedFragment.newInstance())
-                          .addToBackStack(null)
-                          .commit()*/
-
                     return@OnNavigationItemSelectedListener true
-
                 }
                 R.id.category_2 -> {
                     Toast.makeText(
@@ -68,20 +61,12 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
-                    /*supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, CategoryDetailedFragment.newInstance())
-                        .addToBackStack(null)
-                        .commit()*/
-
                     return@OnNavigationItemSelectedListener true
                 }
                 else -> {
                     return@OnNavigationItemSelectedListener false
                 }
             }
-
         })
-
-
     }
 }

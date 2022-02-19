@@ -15,9 +15,7 @@ import com.home.moviescope.recycler.MovieAdapter
 class CategoryDetailedFragment : Fragment() {
     private var _binding: CategoryDetailedFragmentBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var detailedAdapter: MovieAdapter
-
     companion object {
 
         const val CATEGORY_DETAIL: String = "CATEGORY_DETAIL"
@@ -44,7 +42,6 @@ class CategoryDetailedFragment : Fragment() {
             binding.categoryDetailTitle.text = category.name
             setData(category)
         }
-
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(
             requireContext(), 2, GridLayoutManager.VERTICAL, false
         )
@@ -65,7 +62,6 @@ class CategoryDetailedFragment : Fragment() {
                         .replace(R.id.container, MovieFragment.newInstance(bundle))
                         .addToBackStack(null)
                         .commit()
-
                 }
             }
         })

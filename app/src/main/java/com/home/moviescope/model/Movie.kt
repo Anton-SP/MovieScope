@@ -3,7 +3,6 @@ package com.home.moviescope.model
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
-
 @Parcelize
 data class Movie(
     val title: String = "default title",

@@ -14,9 +14,7 @@ import com.home.moviescope.databinding.CategoryListBinding
 import com.home.moviescope.model.Category
 import com.home.moviescope.view.MovieFragment
 
-
 //адаптер для внешнего ресайклера (категорий) включает в себя адаптер для вложенного горизонтального ресайклера (фильмы)
-
 class CategoryAdapter(var categoryList: List<Category>) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
@@ -26,14 +24,11 @@ class CategoryAdapter(var categoryList: List<Category>) :
 
     private lateinit var listener: onItemClickListener
     private lateinit var movieAdapter: MovieAdapter
-  //  private lateinit var allButton: androidx.appcompat.widget.AppCompatButton
     private lateinit var allButton: TextView
-
 
     fun setOnItemClickListener(listener: onItemClickListener) {
         this.listener = listener
     }
-
 
     inner class ViewHolder(val binding: CategoryListBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -69,7 +64,6 @@ class CategoryAdapter(var categoryList: List<Category>) :
                 }
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -88,5 +82,4 @@ class CategoryAdapter(var categoryList: List<Category>) :
     override fun getItemCount(): Int {
         return categoryList.size
     }
-
 }

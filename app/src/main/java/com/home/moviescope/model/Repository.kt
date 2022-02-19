@@ -14,9 +14,6 @@ class Repository:Repo {
             Category("Category 8"),
             Category("Category 9"),
             Category("Category 10")
-
         )
     }
-
-
 }

@@ -24,14 +24,20 @@ class CategoryAdapter(var categoryList: List<Category>) :
 
     private lateinit var listener: onItemClickListener
     private lateinit var movieAdapter: MovieAdapter
-    private lateinit var allButton: TextView
 
     fun setOnItemClickListener(listener: onItemClickListener) {
         this.listener = listener
     }
 
-    inner class ViewHolder(val binding: CategoryListBinding) :
+    inner class ViewHolder(private val binding: CategoryListBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        private var allButton=binding.categoryAll.apply { setOnClickListener {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(itemView, position)
+            }
+        } }
 
         fun bind(category: Category) {
             binding.categoryTitle.text = category.name
@@ -55,15 +61,7 @@ class CategoryAdapter(var categoryList: List<Category>) :
             })
         }
 
-        init {
-            allButton = binding.categoryAll
-            allButton.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(itemView, position)
-                }
-            }
-        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

@@ -27,19 +27,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initToolbarAndDrawer() {
-        val toolbar = binding.customToolbar
-        setSupportActionBar(toolbar)
-        initDrawer(toolbar)
-    }
+        setSupportActionBar(binding.customToolbar)
+        initDrawer(binding.customToolbar)
+        }
 
     private fun initDrawer(toolbar: Toolbar) {
-        val drawer = binding.mainDrawer
+      //  val drawer = binding.mainDrawer
         val toggle = ActionBarDrawerToggle(
-            this, drawer, toolbar,
+            this, binding.mainDrawer, toolbar,
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
-        drawer.addDrawerListener(toggle)
+        binding.mainDrawer.addDrawerListener(toggle)
         toggle.syncState()
 
         val navigationView = binding.navigationView

@@ -18,8 +18,8 @@ class MovieFragment : Fragment() {
 
         @JvmStatic
         fun newInstance(bundle: Bundle): MovieFragment {
-            val fragment = MovieFragment()
-            fragment.arguments = bundle
+            val fragment = MovieFragment().apply { arguments = bundle }
+            //fragment.arguments = bundle
             return fragment
         }
     }
@@ -35,11 +35,10 @@ class MovieFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val movie = arguments?.getParcelable<Movie>(MOVIE)
-        if (movie != null) {
-            binding.movieGenre.text = movie.genre
-            binding.movieTitle.text = movie.title
-        }
+        val movie = arguments?.getParcelable<Movie>(MOVIE)?.also {
+            binding.movieGenre.text = it.genre
+            binding.movieTitle.text = it.title
+        } ?: throw IllegalArgumentException("Wrong data")
     }
 
 }

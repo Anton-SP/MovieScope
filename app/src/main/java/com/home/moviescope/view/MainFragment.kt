@@ -24,7 +24,8 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var categoryList: List<Category>
-    private lateinit var categoryAll: TextView
+
+    //    private lateinit var categoryAll: TextView
     private lateinit var viewModel: MainViewModel
 
     companion object {
@@ -87,16 +88,15 @@ class MainFragment : Fragment() {
         //клик по категории чтбы открыть детайльный обзор
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.onItemClickListener {
             override fun onItemClick(itemView: View?, position: Int) {
-                var category = categoryAdapter.categoryList[position]
-                val manager = activity?.supportFragmentManager
-                if (manager != null) {
-                    var bundle = Bundle()
-                    bundle.putParcelable(CategoryDetailedFragment.CATEGORY_DETAIL, category)
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .add(R.id.container, CategoryDetailedFragment.newInstance(bundle))
-                        .addToBackStack(null)
-                        .commit()
-                }
+                var bundle = Bundle()
+                bundle.putParcelable(
+                    CategoryDetailedFragment.CATEGORY_DETAIL,
+                    categoryAdapter.categoryList[position]
+                )
+                requireActivity().supportFragmentManager?.beginTransaction()
+                    .add(R.id.container, CategoryDetailedFragment.newInstance(bundle))
+                    .addToBackStack(null)
+                    .commit()
             }
         })
     }

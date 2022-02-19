@@ -16,13 +16,13 @@ class CategoryDetailedFragment : Fragment() {
     private var _binding: CategoryDetailedFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var detailedAdapter: MovieAdapter
+
     companion object {
 
         const val CATEGORY_DETAIL: String = "CATEGORY_DETAIL"
+
         fun newInstance(bundle: Bundle): CategoryDetailedFragment {
-            val fragment = CategoryDetailedFragment()
-            fragment.arguments = bundle
-            return fragment
+            return CategoryDetailedFragment().also { it.arguments = bundle }
         }
     }
 
@@ -37,11 +37,11 @@ class CategoryDetailedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val category = arguments?.getParcelable<Category>(CATEGORY_DETAIL)
-        if (category != null) {
-            binding.categoryDetailTitle.text = category.name
-            setData(category)
+        val category = arguments?.getParcelable<Category>(CATEGORY_DETAIL)?.also {
+            binding.categoryDetailTitle.text = it.name
+            setData(it)
         }
+
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(
             requireContext(), 2, GridLayoutManager.VERTICAL, false
         )
@@ -51,20 +51,25 @@ class CategoryDetailedFragment : Fragment() {
     private fun setData(category: Category) {
         detailedAdapter = MovieAdapter(category.members)
         binding.movieRecycle.adapter = detailedAdapter
-        detailedAdapter.setOnItemMovieClickListener(object : MovieAdapter.onMovieItemClickListener {
-            override fun onItemClick(itemView: View?, position: Int) {
-                var movie = detailedAdapter.movieList[position]
-                val manager = activity?.supportFragmentManager
-                if (manager != null) {
-                    var bundle = Bundle()
-                    bundle.putParcelable(MovieFragment.MOVIE, movie)
-                    manager.beginTransaction()
-                        .replace(R.id.container, MovieFragment.newInstance(bundle))
-                        .addToBackStack(null)
-                        .commit()
-                }
+            .apply {
+                setOnItemMovieClickListener(object : MovieAdapter.onMovieItemClickListener {
+                    override fun onItemClick(itemView: View?, position: Int) {
+                        var bundle =
+                            Bundle().apply {
+                                putParcelable(
+                                    MovieFragment.MOVIE,
+                                    detailedAdapter.movieList[position]
+                                )
+                            }
+
+                        requireActivity().supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.container, MovieFragment.newInstance(bundle))
+                            .addToBackStack(null)
+                            .commit()
+                    }
+                })
             }
-        })
     }
 
     override fun onDestroyView() {

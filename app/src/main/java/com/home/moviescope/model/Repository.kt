@@ -2,7 +2,9 @@ package com.home.moviescope.model
 
 class Repository:Repo {
     override fun getCategoryFromServer(): List<Category> {
-        //дефолтный набор категорий
+        /**
+         * дефолтный набор категорий
+         */
         return listOf(
             Category("Category 1"),
             Category("Category 2"),

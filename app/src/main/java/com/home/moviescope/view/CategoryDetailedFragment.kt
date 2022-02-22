@@ -5,24 +5,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.home.moviescope.R
 import com.home.moviescope.databinding.CategoryDetailedFragmentBinding
 import com.home.moviescope.model.Category
 import com.home.moviescope.recycler.MovieAdapter
+import com.home.moviescope.viewmodel.category.CategoryViewModel
+import com.home.moviescope.viewmodel.movie.MovieViewModel
 
 class CategoryDetailedFragment : Fragment() {
     private var _binding: CategoryDetailedFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var detailedAdapter: MovieAdapter
+    private val categoryModel: CategoryViewModel by activityViewModels<CategoryViewModel>()
+    private val movieModel: MovieViewModel by activityViewModels<MovieViewModel>()
 
     companion object {
-
         const val CATEGORY_DETAIL: String = "CATEGORY_DETAIL"
-
-        fun newInstance(bundle: Bundle): CategoryDetailedFragment {
-            return CategoryDetailedFragment().also { it.arguments = bundle }
+        fun newInstance(): CategoryDetailedFragment {
+            return CategoryDetailedFragment()//.apply { arguments = bundle }
         }
     }
 
@@ -37,11 +41,10 @@ class CategoryDetailedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val category = arguments?.getParcelable<Category>(CATEGORY_DETAIL)?.also {
-            binding.categoryDetailTitle.text = it.name
-            setData(it)
-        }
-
+        categoryModel.category.observe(viewLifecycleOwner, Observer { category ->
+            binding.categoryDetailTitle.text = category.name
+            setData(category)
+        })
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(
             requireContext(), 2, GridLayoutManager.VERTICAL, false
         )
@@ -54,17 +57,10 @@ class CategoryDetailedFragment : Fragment() {
             .apply {
                 setOnItemMovieClickListener(object : MovieAdapter.onMovieItemClickListener {
                     override fun onItemClick(itemView: View?, position: Int) {
-                        var bundle =
-                            Bundle().apply {
-                                putParcelable(
-                                    MovieFragment.MOVIE,
-                                    detailedAdapter.movieList[position]
-                                )
-                            }
-
+                        movieModel.setMovie(detailedAdapter.movieList.get(position))
                         requireActivity().supportFragmentManager
                             .beginTransaction()
-                            .replace(R.id.container, MovieFragment.newInstance(bundle))
+                            .replace(R.id.container, MovieFragment.newInstance())
                             .addToBackStack(null)
                             .commit()
                     }

@@ -17,6 +17,7 @@ import com.home.moviescope.model.Category
 import com.home.moviescope.recycler.CategoryAdapter
 import com.home.moviescope.viewmodel.AppState
 import com.home.moviescope.viewmodel.MainViewModel
+import com.home.moviescope.viewmodel.category.CategoryListViewModel
 import com.home.moviescope.viewmodel.category.CategoryViewModel
 import com.home.moviescope.viewmodel.movie.MovieViewModel
 
@@ -24,18 +25,19 @@ class MainFragment : Fragment() {
 
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var categoryList: List<Category>
-   // private lateinit var mainViewModel: MainViewModel
-    private val mainViewModel: MainViewModel by activityViewModels<MainViewModel>()
-    private val movieModel: MovieViewModel by activityViewModels<MovieViewModel>()
-    private val categoryModel:CategoryViewModel by activityViewModels<CategoryViewModel>()
+   // private lateinit var categoryList: List<Category>
     /**
      * это вычитал из
      * https://developer.android.com/topic/libraries/architecture/viewmodel
      * Use the 'by activityViewModels()' Kotlin property delegate
      * from the fragment-ktx artifact
      */
+    private val mainViewModel: MainViewModel by activityViewModels<MainViewModel>()
+    private val movieModel: MovieViewModel by activityViewModels<MovieViewModel>()
+    private val categoryModel: CategoryViewModel by activityViewModels<CategoryViewModel>()
+    private val categoryListModel: CategoryListViewModel by activityViewModels<CategoryListViewModel>()
 
     companion object {
         fun newInstance() = MainFragment()
@@ -54,7 +56,6 @@ class MainFragment : Fragment() {
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
-  //      mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         val observer = Observer<AppState> { renderData(it) }
         mainViewModel.getLiveData().observe(viewLifecycleOwner, observer)
         mainViewModel.getCategoryFromRemoteSource()
@@ -69,12 +70,13 @@ class MainFragment : Fragment() {
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
-                val categoryData = appState.categoryData
+                //val categoryData = appState.categoryData
+                categoryListModel.setList(appState.categoryData)
                 binding.loadingLayout.visibility = View.GONE
                 view?.showSnackbar(getString(R.string.success_message))
-                //Snackbar.make(binding.mainFragment, "Success", Snackbar.LENGTH_LONG).show()
-                //load test data
-                setData(categoryData)
+            //    setData(categoryData)
+                setData()
+
             }
             is AppState.Loading -> {
                 binding.loadingLayout.visibility = View.VISIBLE
@@ -91,14 +93,14 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setData(categoryData: List<Category>?) {
-        if (categoryData != null) {
-            categoryList = categoryData
-        }
-        categoryAdapter = CategoryAdapter(categoryList,movieModel)
-        binding.catalogList.adapter = categoryAdapter
+   // private fun setData(categoryData: List<Category>?) {
+    private fun setData() {
+       categoryListModel.categoryList.observe(viewLifecycleOwner, Observer { categoryList ->
+           categoryAdapter = CategoryAdapter(categoryList, movieModel)
+           binding.catalogList.adapter = categoryAdapter
+       })
         /**
-         * клик по категории чтбы открыть детайльный обзор
+         * клик по категории чтбы открыть детальный обзор
          */
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.onItemClickListener {
             override fun onItemClick(itemView: View?, position: Int) {
@@ -111,8 +113,10 @@ class MainFragment : Fragment() {
         })
     }
 
-    fun View.showSnackbar(text: String,//собственно обязательная часть часть дз
-                           length: Int = Snackbar.LENGTH_SHORT) {
+    fun View.showSnackbar(
+        text: String,//собственно обязательная часть часть дз
+        length: Int = Snackbar.LENGTH_SHORT
+    ) {
         Snackbar.make(this, text, length).show()
     }
 }

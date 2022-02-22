@@ -20,6 +20,8 @@ import com.home.moviescope.viewmodel.movie.MovieViewModel
 /**
  * адаптер для внешнего ресайклера (категорий) включает в себя адаптер для вложенного горизонтального ресайклера (фильмы)
  */
+//не знаю как тут получить досутп к viewmodel передал как параметр но это не правильно т.к.
+//адаптер находтися на уровне VIEW и приписываь к нему ссылку на viewModel не очень корректно.
 class CategoryAdapter(var categoryList: List<Category>, val movieModel: MovieViewModel) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
@@ -59,8 +61,8 @@ class CategoryAdapter(var categoryList: List<Category>, val movieModel: MovieVie
             movieAdapter.setOnItemMovieClickListener(object :
                 MovieAdapter.onMovieItemClickListener {
                 override fun onItemClick(itemView: View?, position: Int) {
-                    movieModel.setMovie(movieAdapter.movieList?.get(position))
-                    //вот тут не знаю хорош ли это. контекст выдавать за активити
+                    movieModel.setMovie(movieAdapter.movieList[position])
+
                     val activity = itemView?.context as AppCompatActivity
                     activity.supportFragmentManager.beginTransaction()
                         .replace(R.id.container, MovieFragment.newInstance())

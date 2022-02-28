@@ -1,20 +1,15 @@
 package com.home.moviescope.recycler
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.home.moviescope.R
 import com.home.moviescope.databinding.CategoryListBinding
 import com.home.moviescope.model.Category
-import com.home.moviescope.view.MovieFragment
+import com.home.moviescope.view.details.MovieFragment
 import com.home.moviescope.viewmodel.movie.MovieViewModel
 
 /**

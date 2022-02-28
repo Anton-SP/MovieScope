@@ -6,16 +6,10 @@ class Repository:Repo {
          * дефолтный набор категорий
          */
         return listOf(
-            Category("Category 1"),
-            Category("Category 2"),
-            Category("Category 3"),
-            Category("Category 4"),
-            Category("Category 5"),
-            Category("Category 6"),
-            Category("Category 7"),
-            Category("Category 8"),
-            Category("Category 9"),
-            Category("Category 10")
+            Category("Now in theatres ","now_playing"),
+            Category("Popular","popular"),
+            Category("Top rated","top_rated"),
+            Category("Upcoming","upcoming")
         )
     }
 }

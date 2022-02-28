@@ -1,11 +1,11 @@
 package com.home.moviescope.view
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,20 +14,28 @@ import com.google.android.material.snackbar.Snackbar
 import com.home.moviescope.R
 import com.home.moviescope.databinding.MainFragmentBinding
 import com.home.moviescope.model.Category
+import com.home.moviescope.model.CategoryDTO
+import com.home.moviescope.model.Movie
 import com.home.moviescope.recycler.CategoryAdapter
+import com.home.moviescope.view.details.CategoryDetailedFragment
 import com.home.moviescope.viewmodel.AppState
 import com.home.moviescope.viewmodel.MainViewModel
 import com.home.moviescope.viewmodel.category.CategoryListViewModel
 import com.home.moviescope.viewmodel.category.CategoryViewModel
 import com.home.moviescope.viewmodel.movie.MovieViewModel
 
+private const val YOUR_API_KEY = "d59e795a41d61b167481e02a00402add"
+
 class MainFragment : Fragment() {
+
 
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var categoryAdapter: CategoryAdapter
-   // private lateinit var categoryList: List<Category>
+
+    private lateinit var categoryBundle: Category
+    // private lateinit var categoryList: List<Category>
     /**
      * это вычитал из
      * https://developer.android.com/topic/libraries/architecture/viewmodel
@@ -38,6 +46,18 @@ class MainFragment : Fragment() {
     private val movieModel: MovieViewModel by activityViewModels<MovieViewModel>()
     private val categoryModel: CategoryViewModel by activityViewModels<CategoryViewModel>()
     private val categoryListModel: CategoryListViewModel by activityViewModels<CategoryListViewModel>()
+
+    private val onLoaderListener: Loader.LoaderListener =
+        object : Loader.LoaderListener {
+            override fun onLoaded(categoryDTO: CategoryDTO, category: Category) {
+               displayCategory(categoryDTO,category)
+            }
+
+            override fun onFailed(throwable: Throwable) {
+                Toast.makeText(requireContext(),"FUN DISPLAY! ERROR",Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
     companion object {
         fun newInstance() = MainFragment()
@@ -60,6 +80,9 @@ class MainFragment : Fragment() {
         mainViewModel.getLiveData().observe(viewLifecycleOwner, observer)
         mainViewModel.getCategoryFromRemoteSource()
         binding.catalogList.layoutManager = layoutManager
+
+/*        val loader = Loader(onLoaderListener,"now_playing")
+        loader.loadCategory()*/
     }
 
     override fun onDestroyView() {
@@ -71,10 +94,18 @@ class MainFragment : Fragment() {
         when (appState) {
             is AppState.Success -> {
                 //val categoryData = appState.categoryData
+                /**
+                 * подгружаем фильмы к нашим категориям
+                 */
+
+               for (category in appState.categoryData) {
+                      val loader = Loader(onLoaderListener,category)
+                      loader.loadCategory(category.requestName)
+                }
                 categoryListModel.setList(appState.categoryData)
                 binding.loadingLayout.visibility = View.GONE
                 view?.showSnackbar(getString(R.string.success_message))
-            //    setData(categoryData)
+                //    setData(categoryData)
                 setData()
 
             }
@@ -93,12 +124,13 @@ class MainFragment : Fragment() {
         }
     }
 
-   // private fun setData(categoryData: List<Category>?) {
+    // private fun setData(categoryData: List<Category>?) {
     private fun setData() {
-       categoryListModel.categoryList.observe(viewLifecycleOwner, Observer { categoryList ->
-           categoryAdapter = CategoryAdapter(categoryList, movieModel)
-           binding.catalogList.adapter = categoryAdapter
-       })
+        categoryListModel.categoryList.observe(viewLifecycleOwner, Observer { categoryList ->
+            categoryAdapter = CategoryAdapter(categoryList, movieModel)
+            binding.catalogList.adapter = categoryAdapter
+        })
+
         /**
          * клик по категории чтбы открыть детальный обзор
          */
@@ -114,9 +146,24 @@ class MainFragment : Fragment() {
     }
 
     fun View.showSnackbar(
-        text: String,//собственно обязательная часть часть дз
+        text: String,
         length: Int = Snackbar.LENGTH_SHORT
     ) {
         Snackbar.make(this, text, length).show()
     }
+
+    private fun displayCategory(categoryDTO: CategoryDTO, category: Category) {
+        with(binding) {
+            mainView.visibility = View.VISIBLE
+            loadingLayout.visibility = View.GONE
+          for (i in categoryDTO.results.indices){
+              var movie:Movie = Movie(categoryDTO.results[i].genreIds,
+                  categoryDTO.results[i].title,
+                  categoryDTO.results[i].overview)
+              category.members.add(movie)
+              categoryAdapter.notifyDataSetChanged()
+          }
+        }
+    }
+
 }

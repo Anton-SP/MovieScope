@@ -4,8 +4,9 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 data class Movie(
-    val title: String = "default title",
-    val genre: String = "Horror"
+    var genreIds: ArrayList<Int> = arrayListOf(),
+    var title: String? = null,
+    var overview: String? = null,
     //задел на будущее
     // val poster:Image,
     // val rating:Int,

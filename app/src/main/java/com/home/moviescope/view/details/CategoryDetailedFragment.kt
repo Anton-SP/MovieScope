@@ -1,4 +1,4 @@
-package com.home.moviescope.view
+package com.home.moviescope.view.details
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

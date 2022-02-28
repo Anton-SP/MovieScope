@@ -26,7 +26,8 @@ class MovieAdapter(var movieList: List<Movie>) :
     inner class ViewHolder(val binding: MovieItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
-            binding.movieGenre.text = movie.genre
+            binding.movieGenre.text = movie.title
+
         }
 
         init {

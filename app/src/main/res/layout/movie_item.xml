@@ -26,15 +26,16 @@
             android:src="@drawable/ic_baseline_image_24" />
 
         <TextView
-            android:id="@+id/movie_genre"
-            android:layout_width="wrap_content"
+            android:id="@+id/movie_tittle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/movie_item_padding"
             android:paddingRight="@dimen/movie_item_padding"
             android:text="@string/test_genre"
-            android:layout_gravity="center"
+            android:singleLine="false"
+            android:gravity="center"
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textSize="@dimen/movie_item_title_size" />
 
     </LinearLayout>
 

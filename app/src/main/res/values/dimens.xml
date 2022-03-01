@@ -21,4 +21,5 @@
     <dimen name="category_size">18sp</dimen>
     <dimen name="all_button_size">14sp</dimen>
     <dimen name="margin_rv">15dp</dimen>
+    <dimen name="movie_item_title_size">18sp</dimen>
 </resources>

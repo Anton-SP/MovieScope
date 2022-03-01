@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.home.moviescope.BuildConfig
+import com.home.moviescope.BuildConfig.MOVIEDB_API_KEY
 import com.home.moviescope.model.Category
 import com.home.moviescope.model.CategoryDTO
 import java.io.BufferedReader
@@ -21,12 +22,17 @@ class Loader(
     private val listener: LoaderListener,
     private val category: Category
 ) {
-
+    /**
+     * собственно загрузчик
+     * как парарметр принимает "категорию"
+     * в которой опредлено свойство необходимое для запроса конкретной категории
+     *
+     */
     @RequiresApi(Build.VERSION_CODES.N)
     fun loadCategory(categoryReq: String?) =
         try {
             val uri =
-                URL("https://api.themoviedb.org/3/movie/${categoryReq}?api_key=d59e795a41d61b167481e02a00402add&language=ru-RU&page=1")
+                URL("https://api.themoviedb.org/3/movie/${categoryReq}?api_key=${MOVIEDB_API_KEY}&language=ru-RU&page=1")
             val handler = Handler()
 
             Thread {
@@ -35,8 +41,6 @@ class Loader(
                     urlConnection = (uri.openConnection() as HttpsURLConnection).apply {
                         requestMethod = "GET"
                         readTimeout = 10000
-
-                        //     addRequestProperty("api_key", BuildConfig.MOVIEDB_API_KEY )
                     }
                     val bufferedReader =
                         BufferedReader(InputStreamReader(urlConnection.inputStream))
@@ -62,11 +66,15 @@ class Loader(
             listener.onFailed(e)
         }
 
-
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getLines(reader: BufferedReader): String {
         return reader.lines().collect(Collectors.joining("\n"))
     }
+
+    /**
+     * расширил  onLoader текущей категорией
+     * структура получается поэтому нужно знать куда лодить подгруженные данные
+     */
     interface LoaderListener {
         fun onLoaded(categoryDTO: CategoryDTO,category: Category)
         fun onFailed(throwable: Throwable)

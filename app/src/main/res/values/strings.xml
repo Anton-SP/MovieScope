@@ -21,4 +21,8 @@
     <string name="category_2_test">category_2</string>
     <string name="category_all">ALL</string>
     <string name="success_message">Success</string>
+    <string name="airplane_message_on">Warning you just turn on the AIRPLANE MODE, data can not be loaded!</string>
+    <string name="airplane_message_off">You just turn off the AIRPLANE MODE, you are back online!</string>
+    <string name="dialog_error_ok">I got it</string>
+
 </resources>

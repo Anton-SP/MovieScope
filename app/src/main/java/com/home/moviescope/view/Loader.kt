@@ -26,7 +26,6 @@ class Loader(
      * собственно загрузчик
      * как парарметр принимает "категорию"
      * в которой опредлено свойство необходимое для запроса конкретной категории
-     *
      */
     @RequiresApi(Build.VERSION_CODES.N)
     fun loadCategory(categoryReq: String?) =
@@ -70,10 +69,9 @@ class Loader(
     private fun getLines(reader: BufferedReader): String {
         return reader.lines().collect(Collectors.joining("\n"))
     }
-
     /**
      * расширил  onLoader текущей категорией
-     * структура получается поэтому нужно знать куда лодить подгруженные данные
+     * структура получается вложенной поэтому нужно знать куда лодить подгруженные данные
      */
     interface LoaderListener {
         fun onLoaded(categoryDTO: CategoryDTO,category: Category)

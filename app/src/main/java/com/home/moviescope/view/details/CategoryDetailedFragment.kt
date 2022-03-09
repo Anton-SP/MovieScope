@@ -20,8 +20,8 @@ class CategoryDetailedFragment : Fragment() {
     private var _binding: CategoryDetailedFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var detailedAdapter: MovieAdapter
-    private val categoryModel: CategoryViewModel by activityViewModels<CategoryViewModel>()
-    private val movieModel: MovieViewModel by activityViewModels<MovieViewModel>()
+    private val categoryModel: CategoryViewModel by activityViewModels()
+    private val movieModel: MovieViewModel by activityViewModels()
 
     companion object {
         const val CATEGORY_DETAIL: String = "CATEGORY_DETAIL"

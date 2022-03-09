@@ -5,17 +5,21 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.home.moviescope.BuildConfig
 import com.home.moviescope.R
 import com.home.moviescope.databinding.MainFragmentBinding
 import com.home.moviescope.model.Category
@@ -29,6 +33,9 @@ import com.home.moviescope.viewmodel.MainViewModel
 import com.home.moviescope.viewmodel.category.CategoryListViewModel
 import com.home.moviescope.viewmodel.category.CategoryViewModel
 import com.home.moviescope.viewmodel.movie.MovieViewModel
+import okhttp3.*
+import java.io.IOException
+import java.net.URL
 import java.util.ArrayList
 
 const val LOAD_INTENT_FILTER = "LOAD_INTENT_FILTER"
@@ -42,6 +49,7 @@ const val REQUEST_ERROR_MESSAGE_EXTRA = "REQUEST_ERROR_MESSAGE_EXTRA"
 const val RESPONSE_SUCCESS_EXTRA = "RESPONSE_SUCCESS_EXTRA"
 const val RESULTS_DTO_EXTRA = "RESULTS_DTO_EXTRA"
 const val ID_EXTRA = "ID_EXTRA"
+const val MAIN_LINK = "https://api.themoviedb.org/3/movie/"
 private const val PROCESS_ERROR = "Обработка ошибки"
 
 class MainFragment : Fragment() {
@@ -51,7 +59,7 @@ class MainFragment : Fragment() {
 
     private lateinit var categoryAdapter: CategoryAdapter
 
-    private val loadResultReceiver: BroadcastReceiver = object :
+   /* private val loadResultReceiver: BroadcastReceiver = object :
         BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             when (intent.getStringExtra(LOAD_RESULT_EXTRA)) {
@@ -80,7 +88,7 @@ class MainFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 
     /**
      * это вычитал из
@@ -98,21 +106,6 @@ class MainFragment : Fragment() {
     private val categoryModel: CategoryViewModel by activityViewModels<CategoryViewModel>()
     private val categoryListModel: CategoryListViewModel by activityViewModels<CategoryListViewModel>()
 
-    private val onLoaderListener: Loader.LoaderListener =
-        object : Loader.LoaderListener {
-            override fun onLoaded(categoryDTO: CategoryDTO, category: Category) {
-                loadDataToCategory(categoryDTO, category)
-            }
-
-            override fun onFailed(throwable: Throwable) {
-                Snackbar
-                    .make(binding.mainFragment, "ERROR LOADING DATA", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("RELOAD") {
-                        mainViewModel.getCategoryFromRemoteSource()
-                    }
-                    .show()
-            }
-        }
 
     companion object {
         fun newInstance() = MainFragment()
@@ -121,19 +114,9 @@ class MainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context?.let {
-            LocalBroadcastManager.getInstance(it).registerReceiver(
-                loadResultReceiver,
-                IntentFilter(LOAD_INTENT_FILTER)
-            )
         }
     }
 
-    override fun onDestroy() {
-        context?.let {
-            LocalBroadcastManager.getInstance(it).unregisterReceiver(loadResultReceiver)
-        }
-        super.onDestroy()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -160,18 +143,50 @@ class MainFragment : Fragment() {
     }
 
     private fun loadMovies(category: Category, id: Int) {
-        Log.d("@@@", "On start service")
-        with(binding) {
-            mainView.visibility = View.VISIBLE
-            loadingLayout.visibility = View.GONE
-            context?.let {
-                it.startService(Intent(it, LoadService::class.java).apply {
-                    putExtra(CATEGORY_REQUEST_NAME, category.requestName)
-                    putExtra(CATEGORY_ID, id)
-                })
-                Log.d("@@@", "Start service")
+        Log.d("@@@", "On start Https")
+      //  binding.mainView.visibility = View.GONE
+      //  binding.loadingLayout.visibility = View.VISIBLE
+        val client = OkHttpClient()
+        val builder: Request.Builder = Request.Builder()
+        builder.url(
+            MAIN_LINK +
+                    "${category.requestName}?api_key=${BuildConfig.MOVIEDB_API_KEY}&language=ru-RU&page=1"
+        )
+        Log.d("@@@", "URL="+ MAIN_LINK+category.requestName+"?api_key="+BuildConfig.MOVIEDB_API_KEY+"&language=ru-RU&page=1")
+        val request: Request = builder.build()
+        val call:Call = client.newCall(request)
+        call.enqueue(object : Callback{
+            val handler:Handler = Handler()
+            override fun onFailure(call: Call, e: IOException) {
+               Log.d("@@@",PROCESS_ERROR+11)
             }
-        }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+                val serverResponse: String? = response.body()?.string()
+                Log.d("@@@",serverResponse!!)
+                if (response.isSuccessful && serverResponse !=null) {
+                    Log.d("@@@","CALL NEW RENDER DATA")
+                    handler.post {renderDataCat(Gson().fromJson(serverResponse,CategoryDTO::class.java),id)
+                        Log.d("@@@","CALL END")
+                    }
+                } else {
+                    Log.d("@@@",PROCESS_ERROR+22)
+                }
+            }
+        })
+    }
+
+    private fun renderDataCat(categoryDTO: CategoryDTO,id: Int) {
+        Log.d("@@@@", "render DATA"+ id)
+
+        categoryListModel.categoryList.observe(viewLifecycleOwner, Observer { categoryList ->
+            Log.d("@@@@", "LOAD TO CAT Success")
+            loadDataToCategory(
+                categoryDTO, categoryList[id])
+        })
+
+        Log.d("@@@@", "render DATA CLOSE")
     }
 
     override fun onDestroyView() {
@@ -184,8 +199,13 @@ class MainFragment : Fragment() {
             is AppState.Success -> {
                 categoryListModel.setList(appState.categoryData)
                 binding.loadingLayout.visibility = View.GONE
+                binding.mainView.visibility = View.VISIBLE
                 view?.showSnackbar(getString(R.string.success_message))
                 Log.d("@@@", "APP Success ")
+
+                /**
+                 * инициализируем адаптер для внешнего рейклера
+                 */
                 setData()
                 /**
                  * подгружаем фильмы в наших категориях
@@ -267,9 +287,12 @@ class MainFragment : Fragment() {
                     categoryDTO.results[i].title,
                     categoryDTO.results[i].overview
                 )
+                Log.d("@@@@",category.name)
+                Log.d("@@@@",movie.title!!)
                 category.members.add(movie)
             }
         }
         categoryAdapter.notifyDataSetChanged()
+        Log.d("@@@","Adapter UPDATE")
     }
 }

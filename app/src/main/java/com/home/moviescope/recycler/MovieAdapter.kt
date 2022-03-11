@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.home.moviescope.databinding.MovieItemBinding
 import com.home.moviescope.model.Movie
 
@@ -29,6 +30,7 @@ class MovieAdapter(var movieList: List<Movie>) :
 
         fun bind(movie: Movie) {
             binding.movieTittle.text = movie.title
+            binding.poster.load(movie.poster_path)
         }
 
         init {

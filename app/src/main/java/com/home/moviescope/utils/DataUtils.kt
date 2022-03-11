@@ -13,8 +13,11 @@ import java.io.IOException
 import java.util.ArrayList
 
 const val MAIN_LINK = "https://api.themoviedb.org/3/movie/"
+const val BASE_POSTER_URL = "https://image.tmdb.org/t/p/w92"
+
 const val PROCESS_ERROR = "Обработка ошибки"
 
+/*
 fun loadMovies(categoryList: List<Category>, id: Int, categoryAdapter: CategoryAdapter) {
     Log.d("@@@", "On start Https")
     val client = OkHttpClient()
@@ -50,20 +53,23 @@ fun loadMovies(categoryList: List<Category>, id: Int, categoryAdapter: CategoryA
                     Log.d("@@@", "CALL END")
                 }
             } else {
-                Log.d("@@@", PROCESS_ERROR + 22)//NEED SHOW SOMETHING
+                Log.d("@@@", PROCESS_ERROR + 22)// NEED SHOW SOMETHING
             }
         }
     })
 }
+*/
 
-private fun convertDTOtoCategory(categoryDTO: CategoryDTO, category: Category) {
+
+ fun convertDTOtoMovieList(categoryDTO: CategoryDTO):MutableList<Movie> {
     /**
      * так как наши данные по жанрам это массив закодированых ID
-     * (раскодируем позже покане придумал как)
+     * (раскодируем позже пока не придумал как)
      * то для надежности пробегаемся по всем полученным данным
      * и добавляем эти объекты по однному
      * затем создаем Фильм и добавляем к нашей категории
      */
+    var movieList:MutableList<Movie> = mutableListOf()
     for (i in categoryDTO.results.indices) {
         var ids: ArrayList<Int> = arrayListOf()
         for (j in categoryDTO.results[i].genre_ids.indices) {
@@ -72,10 +78,20 @@ private fun convertDTOtoCategory(categoryDTO: CategoryDTO, category: Category) {
         var movie = Movie(
             ids,
             categoryDTO.results[i].title,
-            categoryDTO.results[i].overview
+            categoryDTO.results[i].overview,
+            BASE_POSTER_URL+categoryDTO.results[i].poster_path
         )
-        Log.d("@@@@", category.name)
         Log.d("@@@@", movie.title!!)
-        category.members.add(movie)
+        movieList.add(movie
+        )
     }
+    return movieList
 }
+
+fun fillCategory (category: Category, list: MutableList<Movie>, categoryAdapter: CategoryAdapter){
+   // category.members.clear()
+    category.members.addAll(list)
+    categoryAdapter.notifyDataSetChanged()
+}
+
+

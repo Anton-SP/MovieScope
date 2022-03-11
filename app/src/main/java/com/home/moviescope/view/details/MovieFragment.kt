@@ -1,12 +1,14 @@
 package com.home.moviescope.view.details
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import coil.load
 import com.home.moviescope.databinding.MovieFragmentBinding
 import com.home.moviescope.viewmodel.movie.MovieViewModel
 
@@ -41,6 +43,7 @@ class MovieFragment : Fragment() {
             binding.movieGenre.text = movie.genreIds.toString()
             binding.movieTitle.text = movie.title
             binding.movieDescription.text = movie.overview
+            binding.moviePoster.load(movie.poster_path)
         })
     }
 

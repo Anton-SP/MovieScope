@@ -15,13 +15,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.home.moviescope.R
 import com.home.moviescope.databinding.MainFragmentBinding
 import com.home.moviescope.recycler.CategoryAdapter
-import com.home.moviescope.utils.loadMovies
+import com.home.moviescope.utils.fillCategory
 import com.home.moviescope.utils.showSnackbar
 import com.home.moviescope.view.details.CategoryDetailedFragment
 import com.home.moviescope.viewmodel.AppState
 import com.home.moviescope.viewmodel.MainViewModel
 import com.home.moviescope.viewmodel.category.CategoryListViewModel
 import com.home.moviescope.viewmodel.category.CategoryViewModel
+import com.home.moviescope.viewmodel.movie.MovieRepositoryViewModel
 import com.home.moviescope.viewmodel.movie.MovieViewModel
 
 class MainFragment : Fragment() {
@@ -46,6 +47,7 @@ class MainFragment : Fragment() {
     private val movieModel: MovieViewModel by activityViewModels()
     private val categoryModel: CategoryViewModel by activityViewModels()
     private val categoryListModel: CategoryListViewModel by activityViewModels()
+    private val movieRepositoryViewModel: MovieRepositoryViewModel by activityViewModels()
 
     companion object {
         fun newInstance() = MainFragment()
@@ -70,11 +72,14 @@ class MainFragment : Fragment() {
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
+
         val observer = Observer<AppState> { renderData(it) }
         mainViewModel.getLiveData().observe(viewLifecycleOwner, observer)
         mainViewModel.getCategoryFromRemoteSource()
         binding.catalogList.layoutManager = layoutManager
-
+        /**
+         * обновление по свайпу
+         */
         binding.swipeRefreshLayout.setOnRefreshListener {
             mainViewModel.getCategoryFromRemoteSource()
             binding.swipeRefreshLayout.isRefreshing = false
@@ -88,20 +93,42 @@ class MainFragment : Fragment() {
 
     private fun renderData(appState: AppState) {
         when (appState) {
-            is AppState.Success -> {
+            is AppState.SuccessInit -> {
                 categoryListModel.setList(appState.categoryData)
                 binding.loadingLayout.visibility = View.GONE
                 binding.mainView.visibility = View.VISIBLE
-                Log.d("@@@", "APP Success ")
+                Log.d("@@@", "APP SuccessInit ")
                 adapterInit()
                 /**
                  * подгружаем фильмы в наших категориях
                  */
+
                 for (i in appState.categoryData.indices) {
                     Log.d("@@@", "loadMovies in category= " + i)
-                    loadMovies(appState.categoryData, i, categoryAdapter)
+                    movieRepositoryViewModel.getMovieFromRemoteSource(
+                        categoryListModel.categoryList.value?.get(i)?.requestName,
+                        getString(R.string.language_ru),
+                        1
+                    )
+                    /*  movieRepositoryViewModel.getMovieFromRemoteSource(
+                          appState.categoryData[i].requestName,
+                          getString(R.string.language_ru),
+                          1
+                      )*/
+
+                    movieRepositoryViewModel.responseLiveData.value?.let {
+                        categoryListModel.categoryList.value?.get(i)?.let { it1 ->
+                            fillCategory(
+                                it1,
+                                it,
+                                categoryAdapter
+                            )
+                        }
+                    }
+                    ///////////
+                    // loadMovies(appState.categoryData, i, categoryAdapter)
                 }
-                view?.showSnackbar(getString(R.string.success_message))
+                view?.showSnackbar(getString(R.string.success_load_message))
             }
             is AppState.Loading -> {
                 binding.loadingLayout.visibility = View.VISIBLE
@@ -123,6 +150,7 @@ class MainFragment : Fragment() {
         categoryListModel.categoryList.observe(viewLifecycleOwner, Observer { categoryList ->
             categoryAdapter = CategoryAdapter(categoryList, movieModel)
             binding.catalogList.adapter = categoryAdapter
+            categoryAdapter.notifyDataSetChanged()
         })
         /**
          * клик по категории чтбы открыть детальный обзор

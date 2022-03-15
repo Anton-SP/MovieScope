@@ -12,54 +12,8 @@ import okhttp3.*
 import java.io.IOException
 import java.util.ArrayList
 
-const val MAIN_LINK = "https://api.themoviedb.org/3/movie/"
-const val BASE_POSTER_URL = "https://image.tmdb.org/t/p/w92"
 
-const val PROCESS_ERROR = "Обработка ошибки"
-
-/*
-fun loadMovies(categoryList: List<Category>, id: Int, categoryAdapter: CategoryAdapter) {
-    Log.d("@@@", "On start Https")
-    val client = OkHttpClient()
-    val builder: Request.Builder = Request.Builder()
-    builder.url(
-        MAIN_LINK +
-                "${categoryList[id].requestName}?api_key=${BuildConfig.MOVIEDB_API_KEY}&language=ru-RU&page=1"
-    )
-    Log.d(
-        "@@@",
-        "URL=" + MAIN_LINK + categoryList[id].requestName + "?api_key=" + BuildConfig.MOVIEDB_API_KEY + "&language=ru-RU&page=1"
-    )
-    val request: Request = builder.build()
-    val call: Call = client.newCall(request)
-    call.enqueue(object : Callback {
-        val handler: Handler = Handler()
-        override fun onFailure(call: Call, e: IOException) {
-            Log.d("@@@", PROCESS_ERROR + 11)
-        }
-
-        @Throws(IOException::class)
-        override fun onResponse(call: Call, response: Response) {
-            val serverResponse: String? = response.body()?.string()
-            Log.d("@@@", serverResponse!!)
-            if (response.isSuccessful && serverResponse != null) {
-                Log.d("@@@", "CALL NEW RENDER DATA")
-                handler.post {
-                    convertDTOtoCategory(
-                        Gson().fromJson(serverResponse, CategoryDTO::class.java),
-                        categoryList[id]
-                    )
-                    categoryAdapter.notifyDataSetChanged()
-                    Log.d("@@@", "CALL END")
-                }
-            } else {
-                Log.d("@@@", PROCESS_ERROR + 22)// NEED SHOW SOMETHING
-            }
-        }
-    })
-}
-*/
-
+const val BASE_POSTER_URL = "https://image.tmdb.org/t/p/w300"
 
  fun convertDTOtoMovieList(categoryDTO: CategoryDTO):MutableList<Movie> {
     /**
@@ -88,8 +42,8 @@ fun loadMovies(categoryList: List<Category>, id: Int, categoryAdapter: CategoryA
     return movieList
 }
 
-fun fillCategory (category: Category, list: MutableList<Movie>, categoryAdapter: CategoryAdapter){
-   // category.members.clear()
+fun fillCategory (category: Category, list: MutableList<Movie>,categoryAdapter: CategoryAdapter){
+    category.members.clear()
     category.members.addAll(list)
     categoryAdapter.notifyDataSetChanged()
 }

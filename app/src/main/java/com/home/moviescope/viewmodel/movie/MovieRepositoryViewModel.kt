@@ -1,67 +1,81 @@
 package com.home.moviescope.viewmodel.movie
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.home.moviescope.BuildConfig
+import com.home.moviescope.model.Category
 import com.home.moviescope.model.CategoryDTO
-import com.home.moviescope.model.Movie
 import com.home.moviescope.repository.GetMovies
 import com.home.moviescope.repository.MovieRepository
 import com.home.moviescope.repository.RemoteDataSource
 import com.home.moviescope.utils.convertDTOtoMovieList
-import com.home.moviescope.viewmodel.AppState
+import com.home.moviescope.utils.fillCategory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 private const val SERVER_ERROR = "Ошибка сервера"
 private const val REQUEST_ERROR = "Ошибка запроса на сервер"
 private const val CORRUPTED_DATA = "Неполные данные"
 
 class MovieRepositoryViewModel(
-    val movieRepoLiveData: MutableLiveData<AppState> = MutableLiveData(),
-    val responseLiveData: MutableLiveData<MutableList<Movie>> = MutableLiveData<MutableList<Movie>>(),
+
     private val movieRepository: GetMovies = MovieRepository(RemoteDataSource())
 
-): ViewModel() {
+) : ViewModel() {
+    lateinit var categoryAdapter: com.home.moviescope.recycler.CategoryAdapter
 
-    private val callback = object : Callback<CategoryDTO> {
+    private val _categoryList = MutableLiveData<List<Category>>(emptyList())
+    val categoryList: LiveData<List<Category>>
+        get() = _categoryList
+
+    fun setList(categoryList: List<Category>) {
+        _categoryList.value = categoryList
+    }
+
+    /**
+     * вложенный класс кастомного колбэка
+     * по сути мне нужно было прокинуть id категории к которй подгружаем фильмы
+     * ну вот только из за этого он и реализован
+     */
+    inner class customRetrofitCallback<T>(id: Int) : Callback<CategoryDTO> {
+        var _id = id
+
         override fun onResponse(call: Call<CategoryDTO>, response: Response<CategoryDTO>) {
-            val serverResponse : CategoryDTO? = response.body()
-            Log.d("RETROFIT","get response RETROfit")
-            movieRepoLiveData.postValue(
-                if (response.isSuccessful && serverResponse != null) {
-                    Log.d("RETROFIT","GOT response RETROfit")
-                    checkResponse(serverResponse)
-                } else {
-                    Log.d("RETROFIT","empty response RETROfit")
-                    AppState.Error(Throwable(SERVER_ERROR))
-                }
-            )
+            var id = _id
+            val serverResponse: CategoryDTO? = response.body()
+            if (response.isSuccessful && serverResponse != null) {
+                checkResponse(serverResponse, id)
+            } else {
+                Log.d("RETROFIT", REQUEST_ERROR)
+            }
+        }
+
+        private fun checkResponse(serverResponse: CategoryDTO, id: Int) {
+            val results = serverResponse.results
+            if (results.size == 0) {
+                Log.d("RETROFIT", CORRUPTED_DATA)
+            } else {
+                fillCategory(_categoryList.value!![_id], convertDTOtoMovieList(serverResponse),categoryAdapter)
+            }
         }
 
         override fun onFailure(call: Call<CategoryDTO>, t: Throwable) {
-            movieRepoLiveData.postValue(AppState.Error(Throwable(t.message ?: REQUEST_ERROR)))
-        }
-
-    }
-
-    private fun checkResponse(serverResponse: CategoryDTO): AppState {
-    val results = serverResponse.results
-        return  if (results.size == 0 ) {
-            AppState.Error(Throwable(CORRUPTED_DATA))
-        } else {
-            Log.d("RETROFIT","LOAD MOVIES IN RETROfit = " +results[0].title)
-            responseLiveData.postValue(convertDTOtoMovieList(serverResponse))
-            AppState.SuccessLoad(convertDTOtoMovieList(serverResponse))
+            Log.d("RETROFIT", REQUEST_ERROR)
         }
     }
 
-    fun getMovieFromRemoteSource(requestEndpoint:String?,language:String,pages:Int) {
-        Log.d("RETROFIT","LOAD MOVIES IN RETROfit")
-        movieRepoLiveData.value = AppState.Loading
-        movieRepository.getMoviesFromServer(requestEndpoint,BuildConfig.MOVIEDB_API_KEY,language,pages, callback)
+    fun getMovieFromRemoteSource(requestEndpoint: String?, language: String, pages: Int, id: Int) {
+        movieRepository.getMoviesFromServer(
+            requestEndpoint,
+            BuildConfig.MOVIEDB_API_KEY,
+            language,
+            pages,
+            customRetrofitCallback<CategoryDTO>(id)
+        )
     }
 
 }

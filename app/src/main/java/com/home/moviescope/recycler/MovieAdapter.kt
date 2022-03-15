@@ -8,7 +8,6 @@ import coil.load
 import com.home.moviescope.databinding.MovieItemBinding
 import com.home.moviescope.model.Movie
 
-
 /**
  * адаптер для вложенного ресайклера с фильмами
  */

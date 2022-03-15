@@ -28,12 +28,11 @@ class RemoteDataSource() {
     ) {
         moviedbAPI.getMovies(
             requestEndpoint,
-            BuildConfig.MOVIEDB_API_KEY,
+            token,
             language,
             pages
         ).enqueue(callback)
     }
-
 
     private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {
         val httpClient = OkHttpClient.Builder()

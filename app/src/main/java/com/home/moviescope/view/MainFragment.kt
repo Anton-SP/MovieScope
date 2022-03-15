@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -81,7 +82,7 @@ class MainFragment : Fragment() {
          * обновление по свайпу
          */
         binding.swipeRefreshLayout.setOnRefreshListener {
-            mainViewModel.getCategoryFromRemoteSource()
+            categoryAdapter?.let { it.notifyDataSetChanged() }
             binding.swipeRefreshLayout.isRefreshing = false
         }
     }
@@ -101,33 +102,23 @@ class MainFragment : Fragment() {
                 adapterInit()
                 /**
                  * подгружаем фильмы в наших категориях
+                 * не самый красимвый способ прокидывать адаптер во вью модель
+                 * чтобы обновить ресйклер но лучше пока не придумал
+                 * и да архитектура получатеся оч связанной
                  */
+                categoryAdapter?.let {  movieRepositoryViewModel.categoryAdapter = categoryAdapter }
 
-                for (i in appState.categoryData.indices) {
-                    Log.d("@@@", "loadMovies in category= " + i)
+                movieRepositoryViewModel.setList(appState.categoryData)
+              for (i in appState.categoryData.indices) {
+                    Log.d("@@@", "loadMovies in category= " + 1)
                     movieRepositoryViewModel.getMovieFromRemoteSource(
                         categoryListModel.categoryList.value?.get(i)?.requestName,
                         getString(R.string.language_ru),
-                        1
+                        1,
+                        i
                     )
-                    /*  movieRepositoryViewModel.getMovieFromRemoteSource(
-                          appState.categoryData[i].requestName,
-                          getString(R.string.language_ru),
-                          1
-                      )*/
+              }
 
-                    movieRepositoryViewModel.responseLiveData.value?.let {
-                        categoryListModel.categoryList.value?.get(i)?.let { it1 ->
-                            fillCategory(
-                                it1,
-                                it,
-                                categoryAdapter
-                            )
-                        }
-                    }
-                    ///////////
-                    // loadMovies(appState.categoryData, i, categoryAdapter)
-                }
                 view?.showSnackbar(getString(R.string.success_load_message))
             }
             is AppState.Loading -> {

@@ -8,10 +8,4 @@ data class Movie(
     var title: String? = null,
     var overview: String? = null,
     val poster_path: String? = null
-    //задел на будущее
-
-    // val poster:Image,
-    // val rating:Int,
-    // val description:String,
-    // val credits:List<Staff> - еще 1 дата класс?
 )

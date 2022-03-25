@@ -12,7 +12,11 @@ import com.home.moviescope.MyTestBroadcastReceiver
 import com.home.moviescope.R
 import com.home.moviescope.databinding.ActivityMainBinding
 
+
+
 class MainActivity : AppCompatActivity() {
+
+    var testvar:Boolean= false
 
     private lateinit var binding: ActivityMainBinding
 
@@ -26,10 +30,12 @@ class MainActivity : AppCompatActivity() {
         initToolbarAndDrawer()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
+                .replace(R.id.container, MainFragment.newInstance(),"MAIN")
                 .commitNow()
         }
+
         registerReceiver(receiver, IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED))
+
     }
 
     private fun initToolbarAndDrawer() {
@@ -68,9 +74,28 @@ class MainActivity : AppCompatActivity() {
                         .show()
                     return@OnNavigationItemSelectedListener true
                 }
+                R.id.test_db_menu -> {
+                    supportFragmentManager.apply {
+                        beginTransaction()
+                            .add(R.id.container,TestDBFragment.newInstance())
+                            .addToBackStack("")
+                            .commit()
+                    }
+                    true
+                }
+                R.id.testswitch ->{
+                   binding.switchLanguage.setOnCheckedChangeListener(null)
+                    binding.switchLanguage.isChecked = !binding.switchLanguage.isChecked
+                    binding.switchLanguage.setOnCheckedChangeListener({ buttonView, isChecked ->
+                    })
+                    true
+                }
+
                 else -> {
                     return@OnNavigationItemSelectedListener false
                 }
+
+
             }
         })
     }
@@ -79,5 +104,6 @@ class MainActivity : AppCompatActivity() {
         unregisterReceiver(receiver)
         super.onDestroy()
     }
+
 
 }

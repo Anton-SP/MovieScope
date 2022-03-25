@@ -56,8 +56,16 @@ class CategoryAdapter(var categoryList: List<Category>, val movieModel: MovieVie
                     false
                 )
 
+
             movieAdapter = MovieAdapter(category.members)
             binding.movieRv.adapter = movieAdapter
+
+            var expanded = category.expanded
+
+            if (expanded) {
+                binding.movieRv.visibility = View.VISIBLE
+            } else binding.movieRv.visibility = View.GONE
+
 
             movieAdapter.setOnItemMovieClickListener(object :
                 MovieAdapter.onMovieItemClickListener {
@@ -68,14 +76,11 @@ class CategoryAdapter(var categoryList: List<Category>, val movieModel: MovieVie
 
                     val activity = itemView?.context as AppCompatActivity
                     activity.supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, MovieFragment.newInstance())
+                        .add(R.id.container, MovieFragment.newInstance())
                         .addToBackStack(null)
                         .commit()
                 }
             })
-            Log.d("BINDCAT", category.name)
-            Log.d("BINDCAT", movieModel.movie.value?.title.toString())
-
         }
     }
 
@@ -90,6 +95,12 @@ class CategoryAdapter(var categoryList: List<Category>, val movieModel: MovieVie
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(categoryList[position])
+
+        holder.itemView.setOnClickListener { view ->
+          //  var expanded = categoryList[position].expanded
+            categoryList[position].expanded = !categoryList[position].expanded
+            notifyItemChanged(position)
+        }
     }
 
     override fun getItemCount(): Int {

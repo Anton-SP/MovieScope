@@ -1,8 +1,9 @@
 package com.home.moviescope.repository
 
 import com.google.gson.GsonBuilder
-import com.home.moviescope.BuildConfig
 import com.home.moviescope.model.CategoryDTO
+import com.home.moviescope.model.GenresDTO
+import com.home.moviescope.repository.movierepo.MoviedbAPI
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -12,16 +13,18 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Callback
 import java.io.IOException
 
+const val BASE_URL = "https://api.themoviedb.org/3/"
+
 class RemoteDataSource() {
     private val moviedbAPI = Retrofit.Builder()
-        .baseUrl("https://api.themoviedb.org/3/movie/")
+        .baseUrl(BASE_URL)
         .addConverterFactory(
             GsonConverterFactory.create(GsonBuilder().setLenient().create())
         )
         .client(createOkHttpClient(MovieApiInterceptor()))
         .build().create(MoviedbAPI::class.java)
 
-    fun getGetMovies(
+    fun getMovies(
         requestEndpoint: String?, token: String, language: String,
         pages: Int,
         callback: Callback<CategoryDTO>
@@ -32,6 +35,12 @@ class RemoteDataSource() {
             language,
             pages
         ).enqueue(callback)
+    }
+
+    fun getGenres(
+        token: String,language: String,callback: Callback<GenresDTO>
+    ) {
+        moviedbAPI.getGenres(token,language).enqueue(callback)
     }
 
     private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {

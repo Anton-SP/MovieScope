@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +17,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.home.moviescope.R
 import com.home.moviescope.databinding.MainFragmentBinding
 import com.home.moviescope.recycler.CategoryAdapter
-import com.home.moviescope.utils.fillCategory
 import com.home.moviescope.utils.showSnackbar
 import com.home.moviescope.view.details.CategoryDetailedFragment
 import com.home.moviescope.viewmodel.AppState
@@ -39,7 +37,7 @@ class MainFragment : Fragment() {
 
     private lateinit var categoryAdapter: CategoryAdapter
 
-    private var isDataSetRU: Boolean = false// = false// (activity as MainActivity).testvar
+    private var isDataSetRU: Boolean = false
 
     /**
      * это вычитал из
@@ -60,7 +58,7 @@ class MainFragment : Fragment() {
 
     private var reqLanguage: String = EN
 
-    private lateinit var switch: SwitchCompat // = (activity as MainActivity).findViewById<SwitchCompat>(R.id.switch_language)
+    private lateinit var switch: SwitchCompat
 
     companion object {
         fun newInstance() = MainFragment()
@@ -88,15 +86,6 @@ class MainFragment : Fragment() {
         )
 
         checkLanguageRequest()
-/*
-
-        switch.setOnCheckedChangeListener { buttonView, isChecked ->
-            isDataSetRU = isChecked
-            saveLanguageSettings(isDataSetRU)
-            Log.d("isRU", isDataSetRU.toString())
-        }
-*/
-
 
         val observer = Observer<AppState> { renderData(it) }
         mainViewModel.getLiveData().observe(viewLifecycleOwner, observer)
@@ -141,11 +130,12 @@ class MainFragment : Fragment() {
                     saveLanguageSettings(isDataSetRU)
                     Log.d("isRU", isDataSetRU.toString())
                     downloadData(appState)
-                   var  manager = requireActivity().supportFragmentManager
+                    var manager = requireActivity().supportFragmentManager
                     manager.findFragmentByTag("MAIN")?.let {
                         Log.d("FRG", it.tag.toString())
                         manager.beginTransaction().detach(it).commit()
-                        manager.beginTransaction().attach(it).commit() }
+                        manager.beginTransaction().attach(it).commit()
+                    }
 
                 }
 
@@ -189,6 +179,14 @@ class MainFragment : Fragment() {
         })
     }
 
+    /**
+     * работаем с SharedPreference
+     * по локазизации нам говорили надо создават отдельные ресурсы или тип того
+     * (еще не показывали а так для общего развития упоминули)
+     * но цель научиться рабоать с SharedPreference: сохранить его и как то использовать
+     * нагляднее чем смена языка при загрузке фильмов ничего не придумал.
+     */
+
     private fun checkLanguageRequest() {
         activity?.let {
             if (it.getPreferences(Context.MODE_PRIVATE)
@@ -196,29 +194,35 @@ class MainFragment : Fragment() {
             ) {
                 isDataSetRU = true
                 reqLanguage = RU
-                switch.setOnCheckedChangeListener(null)
-                switch.isChecked = true
-                switch.setOnCheckedChangeListener({ buttonView, isChecked ->
-                })
+                with(switch) {
+                    /**
+                     * а вот этого трюка раньше не знал: чтобы программно переключить switch
+                     * нужно отвязать от него Listener
+                     */
+                    setOnCheckedChangeListener(null)
+                    isChecked = true
+                    setOnCheckedChangeListener { buttonView, isChecked ->
+                    }
+                }
             } else {
-                switch.setOnCheckedChangeListener(null)
-                switch.isChecked = false
-                switch.setOnCheckedChangeListener({ buttonView, isChecked ->
-                })
+                with(switch) {
+                    setOnCheckedChangeListener(null)
+                    isChecked = false
+                    setOnCheckedChangeListener { buttonView, isChecked ->
+                    }
+                }
                 reqLanguage = EN
             }
             saveLanguageSettings(isDataSetRU)
         }
     }
 
-
     private fun saveLanguageSettings(dataSetRU: Boolean) {
         activity?.let {
             with(it.getPreferences(Context.MODE_PRIVATE).edit()) {
-                putBoolean(IS_LANGUAGE_RU,dataSetRU)
+                putBoolean(IS_LANGUAGE_RU, dataSetRU)
                 apply()
             }
-
         }
     }
 
@@ -240,7 +244,6 @@ class MainFragment : Fragment() {
                     )
                 }
             }
-            //requireActivity().supportFragmentManager.
         }
     }
 

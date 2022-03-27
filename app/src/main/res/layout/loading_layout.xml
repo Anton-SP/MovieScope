@@ -6,13 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/loadingBackground"
     android:visibility="gone"
-    tools:visibility="visible">
+    tools:visibility="gone">
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
-
 
 </FrameLayout>

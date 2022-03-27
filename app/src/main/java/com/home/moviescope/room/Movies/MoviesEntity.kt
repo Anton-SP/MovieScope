@@ -14,7 +14,6 @@ data class MoviesEntity(
     val title: String = "",
     val overview: String = "",
     val poster_path: String = "",
-    @ColumnInfo(name = "genre_id")
-    val genresId: Int = 0
+    val genreString:String = ""
 
 )

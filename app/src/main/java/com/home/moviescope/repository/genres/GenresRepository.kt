@@ -1,4 +1,4 @@
-package com.home.moviescope.repository
+package com.home.moviescope.repository.genres
 
 import com.home.moviescope.model.Genres
 

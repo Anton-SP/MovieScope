@@ -11,13 +11,10 @@
         android:title="@string/category_2_test" />
 
     <item
-        android:id="@+id/test_db_menu"
+        android:id="@+id/watch_list"
         android:icon="@drawable/ic_baseline_videocam_24"
-        android:title="testDB" />
+        android:title="@string/watch_list_menu" />
 
-    <item
-        android:id="@+id/testswitch"
-        android:icon="@drawable/ic_baseline_videocam_24"
-        android:title="testswitch" />
+
 
 </menu>

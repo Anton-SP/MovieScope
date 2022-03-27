@@ -8,7 +8,7 @@
     <dimen name="header_height">250dp</dimen>
     <dimen name="header_size">35sp</dimen>
     <dimen name="header_logo">100dp</dimen>
-    <dimen name="movie_poster_height">200dp</dimen>
+    <dimen name="movie_poster_height">300dp</dimen>
     <dimen name="movie_title_size">24sp</dimen>
     <dimen name="rating_size">14sp</dimen>
     <dimen name="genre_size">14sp</dimen>
@@ -22,4 +22,7 @@
     <dimen name="all_button_size">14sp</dimen>
     <dimen name="margin_rv">15dp</dimen>
     <dimen name="movie_item_title_size">18sp</dimen>
+    <dimen name="text_pad_standart">5dp</dimen>
+    <dimen name="text_pad_double">10dp</dimen>
+    <dimen name="margin_top_rv">35dp</dimen>
 </resources>

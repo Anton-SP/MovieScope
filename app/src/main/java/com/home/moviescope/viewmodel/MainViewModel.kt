@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.home.moviescope.repository.categoryRepo.Repo
 import com.home.moviescope.repository.categoryRepo.Repository
 
-
 class MainViewModel(
     private val liveDataToObserver: MutableLiveData<AppState> = MutableLiveData(),
     private val repository: Repo = Repository()
@@ -22,6 +21,5 @@ class MainViewModel(
                 repository.getCategoryFromServer()
             )
         )
-
     }
 }

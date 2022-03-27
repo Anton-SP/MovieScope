@@ -25,16 +25,29 @@ class App : Application() {
                         db = Room.databaseBuilder(
                             appInstance!!.applicationContext,
                             MoviesDataBase::class.java, DB_NAME
-                        ).allowMainThreadQueries().build()
+                        )
+                            .build()
                     }
                 }
             }
             return db!!.genresDao()
         }
-    }
-    fun getDB():MoviesDataBase? {
-        return if (db !=null) db
-        else null
+
+        fun getMoviesDao():MoviesDao{
+            if (db == null) {
+                synchronized(MoviesDataBase::class.java) {
+                    if (db == null) {
+                        if (appInstance == null) throw  IllegalStateException("Application is null while creating DataBase")
+                        db = Room.databaseBuilder(
+                            appInstance!!.applicationContext,
+                            MoviesDataBase::class.java, DB_NAME
+                        )
+                            .build()
+                    }
+                }
+            }
+            return db!!.moviesDao()
+        }
     }
 
 }

@@ -1,25 +1,40 @@
 package com.home.moviescope.room.Genres
 
 import androidx.room.*
+import com.home.moviescope.model.Movie
 import com.home.moviescope.room.Movies.MoviesEntity
 
 @Dao
 interface GenresDao {
     @Query("SELECT * FROM GenresEntity")
-    fun all(): List<GenresEntity>
+    suspend fun all(): List<GenresEntity>
 
     @Query("SELECT * FROM GenresEntity WHERE genre LIKE :genre")
-    fun getDataByWord(genre: String): List<GenresEntity>
+    suspend fun getDataByWord(genre: String): List<GenresEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(entity: GenresEntity)
+    suspend fun insert(entity: GenresEntity)
 
     @Update
-    fun update(entity: GenresEntity)
+    suspend fun update(entity: GenresEntity)
 
     @Delete
-    fun delete(entity: GenresEntity)
+    suspend fun delete(entity: GenresEntity)
 
     @Query("DELETE FROM GenresEntity")
-    fun deleteAll()
+    suspend fun deleteAll()
+
+    /**
+     * используется при смене языка
+     * вычищаем старые данные и подгружаем нужные
+     *
+     */
+    @Transaction
+    suspend fun deleteAndInsertAll(entityList:List<GenresEntity>){
+        deleteAll()
+        for (i in entityList.indices){
+            insert(entityList[i])
+        }
+    }
+
 }

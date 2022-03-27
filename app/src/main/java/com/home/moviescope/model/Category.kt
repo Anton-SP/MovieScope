@@ -4,5 +4,5 @@ data class Category(
     val name: String = "Latest",
     val requestName:String?,
     var members: MutableList<Movie> = mutableListOf(),
-    var expanded: Boolean = true //
+    var expanded: Boolean = true
 )

@@ -5,17 +5,42 @@ import androidx.room.*
 @Dao
 interface MoviesDao {
     @Query("SELECT * FROM MoviesEntity")
-    fun all(): List<MoviesEntity>
+    suspend fun all(): List<MoviesEntity>
 
     @Query("SELECT * FROM MoviesEntity WHERE title LIKE :title")
-    fun getDataByWord(title: String): List<MoviesEntity>
+    suspend fun getDataByWord(title: String): List<MoviesEntity>
+
+    @Query("SELECT EXISTS(SELECT * FROM MoviesEntity WHERE title = :title)")
+    fun isExists(title:String): Boolean
+
+    @Query("SELECT * FROM MoviesEntity WHERE title = :title")
+    fun findByTitle(title:String): MoviesEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(entity: MoviesEntity)
+    suspend fun insert(entity: MoviesEntity)
 
     @Update
-    fun update(entity: MoviesEntity)
+    suspend fun update(entity: MoviesEntity)
 
     @Delete
-    fun delete(entity: MoviesEntity)
+    suspend fun delete(entity: MoviesEntity)
+
+    @Query("DELETE FROM MoviesEntity")
+    suspend fun deleteAll()
+
+    @Transaction
+    suspend fun checkAndInsert(entity: MoviesEntity){
+        if (!isExists(entity.title)) {
+           insert(entity)
+        }
+    }
+
+    @Transaction
+    suspend fun checkAndDelete(entity: MoviesEntity){
+        if (isExists(entity.title)) {
+            delete(findByTitle(entity.title))
+        }
+    }
+
+
 }

@@ -13,14 +13,13 @@ import com.home.moviescope.R
 import com.home.moviescope.databinding.ActivityMainBinding
 
 
-
 class MainActivity : AppCompatActivity() {
 
-    var testvar:Boolean= false
+    var testvar: Boolean = false
 
     private lateinit var binding: ActivityMainBinding
 
-    private  val receiver = MyTestBroadcastReceiver()
+    private val receiver = MyTestBroadcastReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         initToolbarAndDrawer()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance(),"MAIN")
+                .replace(R.id.container, MainFragment.newInstance(), "MAIN")
                 .commitNow()
         }
 
@@ -41,10 +40,10 @@ class MainActivity : AppCompatActivity() {
     private fun initToolbarAndDrawer() {
         setSupportActionBar(binding.customToolbar)
         initDrawer(binding.customToolbar)
-        }
+    }
 
     private fun initDrawer(toolbar: Toolbar) {
-      //  val drawer = binding.mainDrawer
+        //  val drawer = binding.mainDrawer
         val toggle = ActionBarDrawerToggle(
             this, binding.mainDrawer, toolbar,
             R.string.navigation_drawer_open,
@@ -74,28 +73,18 @@ class MainActivity : AppCompatActivity() {
                         .show()
                     return@OnNavigationItemSelectedListener true
                 }
-                R.id.test_db_menu -> {
+                R.id.watch_list -> {
                     supportFragmentManager.apply {
                         beginTransaction()
-                            .add(R.id.container,TestDBFragment.newInstance())
+                            .add(R.id.container, DBFragment.newInstance())
                             .addToBackStack("")
                             .commit()
                     }
                     true
                 }
-                R.id.testswitch ->{
-                   binding.switchLanguage.setOnCheckedChangeListener(null)
-                    binding.switchLanguage.isChecked = !binding.switchLanguage.isChecked
-                    binding.switchLanguage.setOnCheckedChangeListener({ buttonView, isChecked ->
-                    })
-                    true
-                }
-
                 else -> {
                     return@OnNavigationItemSelectedListener false
                 }
-
-
             }
         })
     }

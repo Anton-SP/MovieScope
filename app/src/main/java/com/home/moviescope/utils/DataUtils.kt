@@ -1,24 +1,23 @@
 package com.home.moviescope.utils
 
-import android.os.Handler
 import android.util.Log
-import com.google.gson.Gson
-import com.home.moviescope.BuildConfig
 import com.home.moviescope.model.*
 import com.home.moviescope.recycler.CategoryAdapter
 import com.home.moviescope.room.Genres.GenresEntity
 import com.home.moviescope.room.Movies.MoviesEntity
-import okhttp3.*
-import java.io.IOException
 import java.util.ArrayList
 
 
 const val BASE_POSTER_URL = "https://image.tmdb.org/t/p/w300"
 
+/**
+ * конвертация
+ *      конвертация
+ *          конвертация
+ */
 fun convertDTOtoMovieList(categoryDTO: CategoryDTO): MutableList<Movie> {
     /**
-     * так как наши данные по жанрам это массив закодированых ID
-     * (раскодируем позже пока не придумал как)
+     *
      * то для надежности пробегаемся по всем полученным данным
      * и добавляем эти объекты по однному
      * затем создаем Фильм и добавляем к нашей категории
@@ -43,40 +42,27 @@ fun convertDTOtoMovieList(categoryDTO: CategoryDTO): MutableList<Movie> {
     return movieList
 }
 
+fun setGenre(listMovie: MutableList<Movie>, listGenre: MutableList<Genres>) {
+    for (i in listMovie.indices) {
+        listMovie[i].genreString = convertGenreCodeToNames(listMovie[i].genreIds, listGenre)
+    }
+}
+
 fun fillCategory(category: Category, list: MutableList<Movie>, categoryAdapter: CategoryAdapter) {
     category.members.clear()
     category.members.addAll(list)
     categoryAdapter.notifyDataSetChanged()
 }
 
-fun convertDTOtoGenresList(genreDTO: GenresDTO): MutableList<Genres> {
-    var genresList: MutableList<Genres> = mutableListOf()
-    for (i in genreDTO.genres.indices) {
-        genresList.add(genreDTO.genres[i])
-    }
-    Log.d("testdb","convert genres "+ genresList.toString())
-    return genresList
-}
-
-
-
-fun fillGenresList(genresRepo: MutableList<Genres>, list: MutableList<Genres>) {
-    genresRepo.clear()
-    genresRepo.addAll(list)
-    Log.d("testdb", "fill genre repo " + genresRepo.toString())
-}
-
-
-fun convertMoviesEntityToMovie(entityList: List<MoviesEntity>): List<Movie> {
+fun convertMoviesEntityToMovie(entityList: List<MoviesEntity>): MutableList<Movie> {
     return entityList.map {
         Movie(arrayListOf(), it.title, it.overview, it.poster_path)
-    }
+    }.toMutableList()
 }
 
 fun convertMovieToMoviesEntity(movie: Movie): MoviesEntity {
-    return MoviesEntity(0, movie.title!!, movie.overview!!, movie.poster_path!!, 0)
+    return MoviesEntity(0, movie.title!!, movie.overview!!, movie.poster_path!!, movie.genreString)
 }
-
 
 fun convertGenresEntityToGenre(entityList: List<GenresEntity>): List<Genres> {
     return entityList.map {
@@ -88,4 +74,22 @@ fun convertGenreToGenreEntity(genre: Genres): GenresEntity {
     return GenresEntity(0, genre.id, genre.name)
 }
 
+fun convertGenresListToEntityList(genres: List<Genres>): List<GenresEntity> {
+var resListEntity:MutableList<GenresEntity> = mutableListOf()
+        for (i in genres.indices){
+            resListEntity.add(i, GenresEntity(0,genres[i].id,genres[i].name))
+        }
+    return resListEntity
+}
 
+fun convertGenreCodeToNames(genreId: ArrayList<Int>, genreList: List<Genres>): String {
+    var resGenreString: String = ""
+    for (i in genreId.indices) {
+        for (j in genreList.indices) {
+            if (genreId[i] == (genreList[j].id)) {
+                resGenreString = resGenreString + genreList[j].name + " "
+            }
+        }
+    }
+    return resGenreString
+}

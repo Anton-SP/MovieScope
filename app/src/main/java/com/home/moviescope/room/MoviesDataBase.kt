@@ -8,11 +8,11 @@ import com.home.moviescope.room.Movies.MoviesDao
 import com.home.moviescope.room.Movies.MoviesEntity
 
 @Database(
-    entities = arrayOf(GenresEntity::class),
+    entities = arrayOf(GenresEntity::class,MoviesEntity::class),
     version = 1,
     exportSchema = false
 )
 abstract class MoviesDataBase : RoomDatabase() {
     abstract fun genresDao(): GenresDao
- //   abstract fun moviesDao(): MoviesDao
+    abstract fun moviesDao(): MoviesDao
 }

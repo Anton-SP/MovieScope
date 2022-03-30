@@ -1,5 +1,7 @@
 package com.home.moviescope.recycler
 
+import android.text.method.MovementMethod
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -22,14 +24,21 @@ class DBAdapter(val viewModel: DBViewModel) : RecyclerView.Adapter<DBAdapter.Rec
         notifyDataSetChanged()
     }
 
+    fun updateData(data: MutableList<Movie>) {
+        this.data = data
+
+    }
+
+
     inner class RecyclerItemViewHolder(val binding: DBItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
-            if (layoutPosition != RecyclerView.NO_POSITION) {
+            if (adapterPosition != RecyclerView.NO_POSITION) {
                 with(binding) {
                     movieTitle.text = movie.title
                     movieGenre.text = movie.genreString
+                    movieGenre.isSelected=true
                     movieDescription.text =
                         StringBuilder().append("\t").append(movie.overview).toString()
                     moviePoster.load(movie.poster_path)
@@ -37,8 +46,13 @@ class DBAdapter(val viewModel: DBViewModel) : RecyclerView.Adapter<DBAdapter.Rec
                     removeFromWatchList.setOnClickListener { itemView->
                         viewModel.viewModelScope.launch {
                             viewModel.removeMovieFromDB(movie)
-                            this@DBAdapter.notifyItemRemoved(layoutPosition)}
+                            this@DBAdapter.notifyItemRemoved(adapterPosition)
+                            data = viewModel.getMovieList()
+                            updateData(viewModel.getMovieList())
+                            this@DBAdapter.notifyItemRangeChanged(adapterPosition,data.size)
+                           }
                     }
+
                 }
 
             }

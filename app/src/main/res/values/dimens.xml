@@ -24,5 +24,6 @@
     <dimen name="movie_item_title_size">18sp</dimen>
     <dimen name="text_pad_standart">5dp</dimen>
     <dimen name="text_pad_double">10dp</dimen>
-    <dimen name="margin_top_rv">35dp</dimen>
+    <dimen name="margin_top_rv">40dp</dimen>
+    <dimen name="poster_width">200dp</dimen>
 </resources>

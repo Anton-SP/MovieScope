@@ -51,5 +51,9 @@ class LocalRepositoryImp(
         localDataSourceMovie.checkAndDelete(convertMovieToMoviesEntity(movie))
     }
 
+    override suspend fun getDataByWord(search: String): MutableList<Movie> {
+        return convertMoviesEntityToMovie(localDataSourceMovie.getDataByWord(search))
+    }
+
 }
 

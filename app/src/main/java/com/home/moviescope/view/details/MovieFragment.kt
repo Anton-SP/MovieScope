@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import coil.load
 import com.home.moviescope.databinding.MovieFragmentBinding
+import com.home.moviescope.utils.showSnackbar
 import com.home.moviescope.viewmodel.movie.MovieRepositoryViewModel
 import com.home.moviescope.viewmodel.movie.MovieViewModel
 import kotlinx.coroutines.launch
@@ -56,7 +57,10 @@ class MovieFragment : Fragment() {
                     movieRepositoryViewModel.saveMovieToDB(
                         it
                     )
+                    //Toast.makeText(requireContext(),"Movie added to watch List",Toast.LENGTH_SHORT)
+                    view.showSnackbar("Movie added to watch List")
                 }
+
             }
         }
     }

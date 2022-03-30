@@ -56,7 +56,7 @@ fun fillCategory(category: Category, list: MutableList<Movie>, categoryAdapter: 
 
 fun convertMoviesEntityToMovie(entityList: List<MoviesEntity>): MutableList<Movie> {
     return entityList.map {
-        Movie(arrayListOf(), it.title, it.overview, it.poster_path)
+        Movie(arrayListOf(), it.title, it.overview, it.poster_path,it.genreString)
     }.toMutableList()
 }
 

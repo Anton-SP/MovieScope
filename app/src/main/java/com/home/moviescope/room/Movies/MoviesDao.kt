@@ -7,14 +7,17 @@ interface MoviesDao {
     @Query("SELECT * FROM MoviesEntity")
     suspend fun all(): List<MoviesEntity>
 
-    @Query("SELECT * FROM MoviesEntity WHERE title LIKE :title")
-    suspend fun getDataByWord(title: String): List<MoviesEntity>
+    /* @Query("SELECT * FROM MoviesEntity WHERE title LIKE :search OR genreString LIKE :search")
+     suspend fun getDataByWord(search: String): List<MoviesEntity>*/
+
+    @Query("SELECT * FROM MoviesEntity WHERE title LIKE '%' || :search || '%' OR genreString LIKE '%' || :search || '%'")
+    suspend fun getDataByWord(search: String): List<MoviesEntity>
 
     @Query("SELECT EXISTS(SELECT * FROM MoviesEntity WHERE title = :title)")
-    fun isExists(title:String): Boolean
+    fun isExists(title: String): Boolean
 
     @Query("SELECT * FROM MoviesEntity WHERE title = :title")
-    fun findByTitle(title:String): MoviesEntity
+    fun findByTitle(title: String): MoviesEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entity: MoviesEntity)
@@ -29,14 +32,14 @@ interface MoviesDao {
     suspend fun deleteAll()
 
     @Transaction
-    suspend fun checkAndInsert(entity: MoviesEntity){
+    suspend fun checkAndInsert(entity: MoviesEntity) {
         if (!isExists(entity.title)) {
-           insert(entity)
+            insert(entity)
         }
     }
 
     @Transaction
-    suspend fun checkAndDelete(entity: MoviesEntity){
+    suspend fun checkAndDelete(entity: MoviesEntity) {
         if (isExists(entity.title)) {
             delete(findByTitle(entity.title))
         }

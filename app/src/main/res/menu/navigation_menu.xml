@@ -20,6 +20,11 @@
         android:icon="@drawable/ic_baseline_import_contacts_24"
         android:title="@string/contacts" />
 
+    <item
+        android:id="@+id/geolocation"
+        android:icon="@drawable/ic_baseline_location_searching_24"
+        android:title="@string/geolocation_menu" />
+
 
 
 </menu>

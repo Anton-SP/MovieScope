@@ -5,6 +5,7 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.navigation.NavigationView
@@ -41,7 +42,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initDrawer(toolbar: Toolbar) {
-        //  val drawer = binding.mainDrawer
         val toggle = ActionBarDrawerToggle(
             this, binding.mainDrawer, toolbar,
             R.string.navigation_drawer_open,
@@ -54,22 +54,29 @@ class MainActivity : AppCompatActivity() {
         navigationView.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.category_1 -> {
-                    Toast.makeText(
-                        this,
-                        "SHOW CATEGORY FROM DRAWER",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                 var fragmentMain=supportFragmentManager.findFragmentByTag("MAIN")
+                    if (fragmentMain!=null) {
+                        supportFragmentManager.beginTransaction()
+                            . replace(R.id.container, fragmentMain, "MAIN")
+                        .commitNow()
+                    } else
+                        supportFragmentManager.beginTransaction()
+                            .add(R.id.container, MainFragment.newInstance(), "MAIN")
+                            .commitNow()
+
                     binding.mainDrawer.closeDrawers()
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.category_2 -> {
-                    Toast.makeText(
-                        this,
-                        "SHOW CATEGORY FROM DRAWER",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    this.let {
+                        AlertDialog.Builder(it)
+                            .setTitle(getString(R.string.about_title))
+                            .setMessage(getString(R.string.about_message))
+                            .setPositiveButton(getString(R.string.dialog_button_close)){ dialog, _ ->
+                                dialog.dismiss()
+                            }.create()
+                            .show()
+                    }
                     binding.mainDrawer.closeDrawers()
                     return@OnNavigationItemSelectedListener true
                 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movie"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context=".view.details.MovieFragment">
+
+    <ImageView
+        android:id="@+id/movie_poster"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/movie_poster_height"
+        android:paddingTop="@dimen/text_pad_standart"
+        android:src="@drawable/ic_baseline_image_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/movie_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:text="@string/movie_title"
+        android:textColor="@color/black"
+        android:textSize="@dimen/movie_title_size"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/movie_poster" />
+
+    <TextView
+        android:id="@+id/movie_genre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="@dimen/text_pad_double"
+        android:paddingTop="@dimen/text_pad_standart"
+        android:text="@string/movie_genre"
+        android:textAllCaps="true"
+        android:textSize="@dimen/genre_size"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/movie_title" />
+
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movie_genre"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+
+            android:id="@+id/movie_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="top"
+            android:paddingHorizontal="@dimen/text_pad_double"
+            android:paddingTop="@dimen/text_pad_standart"
+            android:text="@string/movie_info"
+            android:textColor="@color/black"
+            android:textSize="@dimen/movie_info_size" />
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

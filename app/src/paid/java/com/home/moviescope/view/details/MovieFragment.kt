@@ -65,12 +65,13 @@ class MovieFragment : Fragment() {
         }
     }
 
+    /**
+    утсраняем замечения :)
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-    /**
-    добавил упушенную очистку биндинга
-     */
+
 
 }

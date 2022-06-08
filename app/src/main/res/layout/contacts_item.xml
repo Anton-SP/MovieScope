@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_contacts"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/standart_margin"
+    android:backgroundTint="#8FB0E8"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardCornerRadius="@dimen/double_margin"
+    app:cardElevation="@dimen/movie_card_elevation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/movie_item_padding"
+            android:paddingRight="@dimen/movie_item_padding"
+            android:text="@string/test_genre"
+            android:singleLine="false"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/movie_item_title_size" />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/movie_item_padding"
+            android:paddingRight="@dimen/movie_item_padding"
+            android:text="@string/test_genre"
+            android:singleLine="false"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/movie_item_title_size" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

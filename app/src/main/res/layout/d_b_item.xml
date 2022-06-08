@@ -1,65 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/error_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:backgroundTint="#8FB0E8">
 
     <ImageView
         android:id="@+id/movie_poster"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/movie_poster_height"
+        android:layout_width="150dp"
+        android:layout_height="300dp"
+        android:layout_marginVertical="@dimen/text_pad_standart"
+        android:background="#8FB0E8"
         android:paddingLeft="@dimen/text_pad_standart"
         android:paddingTop="@dimen/text_pad_standart"
-        android:src="@drawable/ic_baseline_image_24" />
+        android:paddingRight="@dimen/text_pad_standart"
+        android:src="@drawable/ic_baseline_image_24"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <TextView
+        android:id="@+id/movie_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_pad_standart"
+        android:background="@color/sand_main"
+        android:gravity="left"
+        android:text="@string/movie_title"
+        android:textColor="@color/black"
+        android:textSize="@dimen/movie_title_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/movie_genre"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="5dp" />
 
-        <TextView
-            android:id="@+id/movie_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="left"
-            android:text="@string/movie_title"
-            android:textColor="@color/black"
-            android:textSize="@dimen/movie_title_size"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/movie_genre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/sand_main"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:freezesText="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:paddingHorizontal="@dimen/text_pad_double"
+        android:paddingTop="@dimen/text_pad_standart"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="@string/movie_genre"
+        android:textAllCaps="true"
+        android:textSize="@dimen/genre_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/movie_poster"
+        app:layout_constraintTop_toBottomOf="@+id/movie_title" />
 
-        <TextView
-            android:id="@+id/movie_genre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="left"
-            android:paddingHorizontal="@dimen/text_pad_double"
-            android:paddingTop="@dimen/text_pad_standart"
-            android:text="@string/movie_genre"
-            android:textAllCaps="true"
-            android:textSize="@dimen/genre_size"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/movie_description"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/sand_main"
+        android:ellipsize="end"
+        android:gravity="top"
+        android:paddingHorizontal="@dimen/text_pad_double"
+        android:paddingTop="@dimen/text_pad_standart"
+        android:text="@string/movie_info"
+        android:textColor="@color/black"
+        android:textSize="@dimen/movie_info_size"
+        app:layout_constraintBottom_toTopOf="@+id/remove_from_watch_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/movie_poster"
+        app:layout_constraintTop_toBottomOf="@+id/movie_genre"
+        app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/movie_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingHorizontal="@dimen/text_pad_double"
-            android:paddingTop="@dimen/text_pad_standart"
-            android:text="@string/movie_info"
-            android:textColor="@color/black"
-            android:textSize="@dimen/movie_info_size" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/remove_from_watch_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/red_button"
+        android:text="@string/remove_from_watch_list"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/movie_poster" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/remove_from_watch_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/red_button"
-            android:text="@string/remove_from_watch_list" />
 
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.material.navigation.NavigationView
 import com.home.moviescope.MyTestBroadcastReceiver
 import com.home.moviescope.R
+import com.home.moviescope.contacts.ContactsFragment
 import com.home.moviescope.databinding.ActivityMainBinding
 
 
@@ -32,9 +33,7 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, MainFragment.newInstance(), "MAIN")
                 .commitNow()
         }
-
         registerReceiver(receiver, IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED))
-
     }
 
     private fun initToolbarAndDrawer() {
@@ -62,6 +61,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
+                    binding.mainDrawer.closeDrawers()
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.category_2 -> {
@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
+                    binding.mainDrawer.closeDrawers()
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.watch_list -> {
@@ -80,8 +81,20 @@ class MainActivity : AppCompatActivity() {
                             .addToBackStack("")
                             .commit()
                     }
+                    binding.mainDrawer.closeDrawers()
                     true
                 }
+                R.id.contacts -> {
+                    supportFragmentManager.apply {
+                        beginTransaction()
+                            .add(R.id.container,ContactsFragment.newInstance())
+                            .addToBackStack("")
+                            .commit()
+                    }
+                    binding.mainDrawer.closeDrawers()
+                    true
+                }
+
                 else -> {
                     return@OnNavigationItemSelectedListener false
                 }
@@ -93,6 +106,7 @@ class MainActivity : AppCompatActivity() {
         unregisterReceiver(receiver)
         super.onDestroy()
     }
+
 
 
 }

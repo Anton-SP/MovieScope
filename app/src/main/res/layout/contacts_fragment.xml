@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/list_back">
@@ -12,7 +11,7 @@
         android:background="@color/list_back">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/title_container"
+            android:id="@+id/contacts_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -21,59 +20,28 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/category_title"
-                android:layout_width="0dp"
-                android:layout_weight="3"
+                android:id="@+id/contacts_title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/double_margin"
-                android:text="@string/test_category_title"
+                android:text="@string/contacts"
                 android:textColor="@color/white"
                 android:textSize="@dimen/category_size"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/filter_label"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/standart_margin"
-                android:text="@string/fiter_title"
-                android:textColor="@color/white" />
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/filter_input"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/standart_margin"
-                android:layout_marginRight="@dimen/margin_min"
-                android:background="@color/sand_main"
-                android:maxLines="1"
-                android:inputType="text"
-                android:imeOptions="actionGo"
-                android:ems="4" />
-
-            <Button
-                android:id="@+id/filter_button"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_marginRight="@dimen/standart_margin"
-                android:layout_height="wrap_content"
-                android:text="@string/apply_filter"/>
-
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/DBFragmentRecyclerview"
+            android:id="@+id/contacts_fragment_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/margin_rv"
             android:layout_marginTop="@dimen/margin_top_rv"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/title_container" />
+            app:layout_constraintTop_toBottomOf="@id/contacts_container" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

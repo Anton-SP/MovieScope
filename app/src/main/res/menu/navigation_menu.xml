@@ -15,6 +15,11 @@
         android:icon="@drawable/ic_baseline_videocam_24"
         android:title="@string/watch_list_menu" />
 
+    <item
+        android:id="@+id/contacts"
+        android:icon="@drawable/ic_baseline_import_contacts_24"
+        android:title="@string/contacts" />
+
 
 
 </menu>

@@ -12,11 +12,10 @@ import com.home.moviescope.MyTestBroadcastReceiver
 import com.home.moviescope.R
 import com.home.moviescope.contacts.ContactsFragment
 import com.home.moviescope.databinding.ActivityMainBinding
+import com.home.moviescope.geolocation.MapsFragment
 
 
 class MainActivity : AppCompatActivity() {
-
-    var testvar: Boolean = false
 
     private lateinit var binding: ActivityMainBinding
 
@@ -85,13 +84,25 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.contacts -> {
+                    binding.mainDrawer.closeDrawers()
                     supportFragmentManager.apply {
                         beginTransaction()
                             .add(R.id.container,ContactsFragment.newInstance())
                             .addToBackStack("")
                             .commit()
                     }
+                 //   binding.mainDrawer.closeDrawers()
+                    true
+                }
+                R.id.geolocation ->{
                     binding.mainDrawer.closeDrawers()
+                    supportFragmentManager.apply {
+                        beginTransaction()
+                            .add(R.id.container,MapsFragment.newInstance())
+                            .addToBackStack("")
+                            .commit()
+                    }
+             //       binding.mainDrawer.closeDrawers()
                     true
                 }
 

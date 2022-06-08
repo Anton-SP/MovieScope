@@ -113,7 +113,6 @@ class MainFragment : Fragment() {
                 categoryListModel.setList(appState.categoryData)
                 binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
                 binding.mainView.visibility = View.VISIBLE
-                Log.d("@@@", "APP SuccessInit ")
                 adapterInit()
 
                 /**
@@ -235,7 +234,6 @@ class MainFragment : Fragment() {
                 movieRepositoryViewModel.setList(appState.categoryData)
 
                 for (i in appState.categoryData.indices) {
-                    Log.d("@@@", "loadMovies in category= " + 1)
                     movieRepositoryViewModel.getMovieFromRemoteSource(
                         categoryListModel.categoryList.value?.get(i)?.requestName,
                         reqLanguage,

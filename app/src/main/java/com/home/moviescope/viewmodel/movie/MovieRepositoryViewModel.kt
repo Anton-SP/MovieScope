@@ -76,7 +76,6 @@ class MovieRepositoryViewModel(
                 fillCategory(
                     _categoryList.value!![_id],
                     listMovie,
-                    // convertDTOtoMovieList(serverResponse),
                     categoryAdapter
                 )
             }

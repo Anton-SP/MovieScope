@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/category_1"
+        android:icon="@drawable/ic_baseline_videocam_24"
+        android:title="@string/category_1_test" />
+
+    <item
+        android:id="@+id/category_2"
+        android:icon="@drawable/ic_baseline_read_more_24"
+        android:title="@string/category_2_test" />
+</menu>

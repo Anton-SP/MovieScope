@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="category_1_test">Main page</string>
+    <string name="category_2_test">About MovieScope</string>
+    <string name="about_message">Hi, This is Free version of MovieScope.
+        Here you can find out about new, popular and most rated films.
+        A list of films expected at the box office is also available.
+        The paid version of the program has a watch list, geolocation,
+        and you can also call your friends to watch movies together! </string>
+</resources>

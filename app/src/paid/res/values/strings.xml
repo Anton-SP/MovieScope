@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="category_1_test">Main page</string>
+    <string name="category_2_test">About MovieScope</string>
+    <string name="about_message">Hi, This is Paid version of MovieScope.
+        You have access to all the features of the application at the moment,
+        as well as new ones if they appear in the future.
+        Thank you for your choice and support. </string>
+</resources>

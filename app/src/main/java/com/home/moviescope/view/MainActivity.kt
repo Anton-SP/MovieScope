@@ -1,17 +1,23 @@
 package com.home.moviescope.view
 
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.navigation.NavigationView
+import com.home.moviescope.MyTestBroadcastReceiver
 import com.home.moviescope.R
 import com.home.moviescope.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private  val receiver = MyTestBroadcastReceiver()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +30,7 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, MainFragment.newInstance())
                 .commitNow()
         }
+        registerReceiver(receiver, IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED))
     }
 
     private fun initToolbarAndDrawer() {
@@ -68,4 +75,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+    override fun onDestroy() {
+        unregisterReceiver(receiver)
+        super.onDestroy()
+    }
+
 }

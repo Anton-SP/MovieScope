@@ -20,4 +20,5 @@
     <string name="category_1_test">category 1</string>
     <string name="category_2_test">category_2</string>
     <string name="category_all">ALL</string>
+    <string name="success_message">Success</string>
 </resources>

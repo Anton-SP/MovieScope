@@ -7,17 +7,22 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.home.moviescope.R
 import com.home.moviescope.databinding.CategoryListBinding
 import com.home.moviescope.model.Category
 import com.home.moviescope.view.MovieFragment
+import com.home.moviescope.viewmodel.movie.MovieViewModel
 
-
-//адаптер для внешнего ресайклера (категорий) включает в себя адаптер для вложенного горизонтального ресайклера (фильмы)
-
-class CategoryAdapter(var categoryList: List<Category>) :
+/**
+ * адаптер для внешнего ресайклера (категорий) включает в себя адаптер для вложенного горизонтального ресайклера (фильмы)
+ */
+//не знаю как тут получить досутп к viewmodel передал как параметр но это не правильно т.к.
+//адаптер находтися на уровне VIEW и приписываь к нему ссылку на viewModel не очень корректно.
+class CategoryAdapter(var categoryList: List<Category>, val movieModel: MovieViewModel) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     interface onItemClickListener {
@@ -26,43 +31,16 @@ class CategoryAdapter(var categoryList: List<Category>) :
 
     private lateinit var listener: onItemClickListener
     private lateinit var movieAdapter: MovieAdapter
-  //  private lateinit var allButton: androidx.appcompat.widget.AppCompatButton
-    private lateinit var allButton: TextView
-
 
     fun setOnItemClickListener(listener: onItemClickListener) {
         this.listener = listener
     }
 
-
-    inner class ViewHolder(val binding: CategoryListBinding) :
+    inner class ViewHolder(private val binding: CategoryListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(category: Category) {
-            binding.categoryTitle.text = category.name
-            movieAdapter = MovieAdapter(category.members)
-            binding.movieRv.layoutManager =
-                LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
-            binding.movieRv.adapter = movieAdapter
-            movieAdapter.setOnItemMovieClickListener(object :
-                MovieAdapter.onMovieItemClickListener {
-                override fun onItemClick(itemView: View?, position: Int) {
-                    var movie = movieAdapter.movieList[position]
-                    //вот тут не знаю хорош ли это. контекст выдавать за активити
-                    val activity = itemView?.context as AppCompatActivity
-                    var bundle = Bundle()
-                    bundle.putParcelable(MovieFragment.MOVIE, movie)
-                    activity.supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, MovieFragment.newInstance(bundle))
-                        .addToBackStack(null)
-                        .commit()
-                }
-            })
-        }
-
-        init {
-            allButton = binding.categoryAll
-            allButton.setOnClickListener {
+        private var allButton = binding.categoryAll.apply {
+            setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     listener.onItemClick(itemView, position)
@@ -70,6 +48,29 @@ class CategoryAdapter(var categoryList: List<Category>) :
             }
         }
 
+        fun bind(category: Category) {
+            binding.categoryTitle.text = category.name
+            movieAdapter = MovieAdapter(category.members)
+            binding.movieRv.layoutManager =
+                LinearLayoutManager(
+                    binding.root.context,
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+                )
+            binding.movieRv.adapter = movieAdapter
+            movieAdapter.setOnItemMovieClickListener(object :
+                MovieAdapter.onMovieItemClickListener {
+                override fun onItemClick(itemView: View?, position: Int) {
+                    movieModel.setMovie(movieAdapter.movieList[position])
+
+                    val activity = itemView?.context as AppCompatActivity
+                    activity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, MovieFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit()
+                }
+            })
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -88,5 +89,4 @@ class CategoryAdapter(var categoryList: List<Category>) :
     override fun getItemCount(): Int {
         return categoryList.size
     }
-
 }

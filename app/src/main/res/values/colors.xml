@@ -11,5 +11,7 @@
     <color name="movie_item">#5F8DDA</color>
     <color name="list_back">#D3051530</color>
     <color name="loadingBackground">#80FFFFFF</color>
+    <color name="red_button">#FF1744</color>
+
 
 </resources>

@@ -12,11 +12,14 @@ import com.home.moviescope.MyTestBroadcastReceiver
 import com.home.moviescope.R
 import com.home.moviescope.databinding.ActivityMainBinding
 
+
 class MainActivity : AppCompatActivity() {
+
+    var testvar: Boolean = false
 
     private lateinit var binding: ActivityMainBinding
 
-    private  val receiver = MyTestBroadcastReceiver()
+    private val receiver = MyTestBroadcastReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,19 +29,21 @@ class MainActivity : AppCompatActivity() {
         initToolbarAndDrawer()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
+                .replace(R.id.container, MainFragment.newInstance(), "MAIN")
                 .commitNow()
         }
+
         registerReceiver(receiver, IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED))
+
     }
 
     private fun initToolbarAndDrawer() {
         setSupportActionBar(binding.customToolbar)
         initDrawer(binding.customToolbar)
-        }
+    }
 
     private fun initDrawer(toolbar: Toolbar) {
-      //  val drawer = binding.mainDrawer
+        //  val drawer = binding.mainDrawer
         val toggle = ActionBarDrawerToggle(
             this, binding.mainDrawer, toolbar,
             R.string.navigation_drawer_open,
@@ -68,6 +73,15 @@ class MainActivity : AppCompatActivity() {
                         .show()
                     return@OnNavigationItemSelectedListener true
                 }
+                R.id.watch_list -> {
+                    supportFragmentManager.apply {
+                        beginTransaction()
+                            .add(R.id.container, DBFragment.newInstance())
+                            .addToBackStack("")
+                            .commit()
+                    }
+                    true
+                }
                 else -> {
                     return@OnNavigationItemSelectedListener false
                 }
@@ -79,5 +93,6 @@ class MainActivity : AppCompatActivity() {
         unregisterReceiver(receiver)
         super.onDestroy()
     }
+
 
 }

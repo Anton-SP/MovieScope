@@ -3,9 +3,8 @@ package com.home.moviescope.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.home.moviescope.repository.Repo
-import com.home.moviescope.repository.Repository
-import java.lang.Thread.sleep
+import com.home.moviescope.repository.categoryRepo.Repo
+import com.home.moviescope.repository.categoryRepo.Repository
 
 class MainViewModel(
     private val liveDataToObserver: MutableLiveData<AppState> = MutableLiveData(),
@@ -19,23 +18,8 @@ class MainViewModel(
     private fun getDataFromRemoteSource() {
         liveDataToObserver.postValue(
             AppState.SuccessInit(
-                repository.getCategoryFromServer()))
+                repository.getCategoryFromServer()
+            )
+        )
     }
 }
-
-/* var random = (0..10).random() // generated random from 0 to 10 included
-      if (random > 0) {
-          Thread {
-              sleep(2000)
-              liveDataToObserver.postValue(
-                  AppState.SuccessInit(
-                      repository.getCategoryFromServer()
-                  )
-              )
-          }.start()
-      } else {
-          Thread {
-              sleep(2000)
-              liveDataToObserver.postValue(AppState.Error)
-          }.start()
-      }*/

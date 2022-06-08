@@ -1,4 +1,4 @@
-package com.home.moviescope.repository
+package com.home.moviescope.repository.categoryRepo
 
 import com.home.moviescope.model.Category
 

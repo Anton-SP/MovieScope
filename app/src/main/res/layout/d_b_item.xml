@@ -1,44 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/movie"
+    android:id="@+id/error_linear_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical"
-    tools:context=".view.details.MovieFragment">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/movie_poster"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/movie_poster_height"
+        android:paddingLeft="@dimen/text_pad_standart"
         android:paddingTop="@dimen/text_pad_standart"
         android:src="@drawable/ic_baseline_image_24" />
 
-    <TextView
-        android:id="@+id/movie_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal"
-        android:text="@string/movie_title"
-        android:textColor="@color/black"
-        android:textSize="@dimen/movie_title_size"
-        android:textStyle="bold" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/movie_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:text="@string/movie_title"
+            android:textColor="@color/black"
+            android:textSize="@dimen/movie_title_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/movie_genre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:gravity="left"
             android:paddingHorizontal="@dimen/text_pad_double"
             android:paddingTop="@dimen/text_pad_standart"
             android:text="@string/movie_genre"
@@ -46,14 +42,7 @@
             android:textSize="@dimen/genre_size"
             android:textStyle="bold" />
 
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <TextView
-
             android:id="@+id/movie_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,13 +53,13 @@
             android:textColor="@color/black"
             android:textSize="@dimen/movie_info_size" />
 
-    </ScrollView>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/remove_from_watch_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/red_button"
+            android:text="@string/remove_from_watch_list" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/add_watch_list_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add to Watch List" />
-
+    </LinearLayout>
 
 </LinearLayout>

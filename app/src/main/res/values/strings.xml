@@ -2,7 +2,6 @@
     <string name="app_name">MovieScope</string>
     <string name="show_data">Show data</string>
     <string name="cycle">Show cycle</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Closed</string>
@@ -16,7 +15,7 @@
     <string name="movie_info">This movie info</string>
     <string name="movie_poster_description">movie_poster</string>
     <string name="test_genre">Test Horror</string>
-    <string name="test_category_title">TEST</string>
+    <string name="test_category_title">Watch List</string>
     <string name="category_1_test">category 1</string>
     <string name="category_2_test">category_2</string>
     <string name="category_all">ALL</string>
@@ -26,6 +25,9 @@
     <string name="airplane_message_off">You just turn off the AIRPLANE MODE, you are back online!</string>
     <string name="dialog_error_ok">I got it</string>
     <string name="language_ru">ru-RU</string>
+    <string name="remove_from_watch_list">remove from watch list</string>
+    <string name="switch_to_rus">Switch to Rus</string>
+    <string name="watch_list_menu">Watch List</string>
 
 
 </resources>

@@ -2,14 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/category_1"
-        android:title="@string/category_1_test"
-        android:icon="@drawable/ic_baseline_videocam_24"/>
-
-
+        android:icon="@drawable/ic_baseline_videocam_24"
+        android:title="@string/category_1_test" />
 
     <item
         android:id="@+id/category_2"
-        android:title="@string/category_2_test"
-        android:icon="@drawable/ic_baseline_videocam_24"/>
+        android:icon="@drawable/ic_baseline_videocam_24"
+        android:title="@string/category_2_test" />
+
+    <item
+        android:id="@+id/watch_list"
+        android:icon="@drawable/ic_baseline_videocam_24"
+        android:title="@string/watch_list_menu" />
+
+
 
 </menu>

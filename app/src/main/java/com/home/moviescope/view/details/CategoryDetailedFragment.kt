@@ -1,4 +1,4 @@
-package com.home.moviescope.view
+package com.home.moviescope.view.details
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -26,7 +26,7 @@ class CategoryDetailedFragment : Fragment() {
     companion object {
         const val CATEGORY_DETAIL: String = "CATEGORY_DETAIL"
         fun newInstance(): CategoryDetailedFragment {
-            return CategoryDetailedFragment()//.apply { arguments = bundle }
+            return CategoryDetailedFragment()
         }
     }
 
@@ -57,7 +57,7 @@ class CategoryDetailedFragment : Fragment() {
             .apply {
                 setOnItemMovieClickListener(object : MovieAdapter.onMovieItemClickListener {
                     override fun onItemClick(itemView: View?, position: Int) {
-                        movieModel.setMovie(detailedAdapter.movieList.get(position))
+                        movieModel.setMovie(detailedAdapter.movieList[position])
                         requireActivity().supportFragmentManager
                             .beginTransaction()
                             .replace(R.id.container, MovieFragment.newInstance())

@@ -2,16 +2,6 @@ package com.home.moviescope.model
 
 data class Category(
     val name: String = "Latest",
-    val members: List<Movie> = getDefaultMovieList() //заглушка с дефолтными значениями
+    val requestName:String?,
+    var members: MutableList<Movie> = mutableListOf() //
 )
-/**
- * для теста создется дефолтный набор фильмов
- */
-fun getDefaultMovieList(): List<Movie> {
-    return listOf(
-        Movie("movie 1", "Horror"),
-        Movie("movie 2", "Comedy"),
-        Movie("movie 3", "Action"),
-        Movie("movie 4", "Bio")
-    )
-}

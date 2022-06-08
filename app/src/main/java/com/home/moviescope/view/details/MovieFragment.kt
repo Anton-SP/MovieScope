@@ -1,4 +1,4 @@
-package com.home.moviescope.view
+package com.home.moviescope.view.details
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.home.moviescope.databinding.MovieFragmentBinding
-import com.home.moviescope.model.Movie
-import com.home.moviescope.viewmodel.category.CategoryViewModel
 import com.home.moviescope.viewmodel.movie.MovieViewModel
 
 class MovieFragment : Fragment() {
@@ -23,7 +21,7 @@ class MovieFragment : Fragment() {
 
         @JvmStatic
         fun newInstance(): MovieFragment {
-            val fragment = MovieFragment()//.apply { arguments = bundle }
+            val fragment = MovieFragment()
             return fragment
         }
     }
@@ -40,13 +38,10 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         movieModel.movie.observe(viewLifecycleOwner, Observer { movie ->
-            binding.movieGenre.text = movie.genre
+            binding.movieGenre.text = movie.genreIds.toString()
             binding.movieTitle.text = movie.title
+            binding.movieDescription.text = movie.overview
         })
-       /* val movie = arguments?.getParcelable<Movie>(MOVIE)?.also {
-            binding.movieGenre.text = it.genre
-            binding.movieTitle.text = it.title
-        } ?: throw IllegalArgumentException("Wrong data")*/
     }
 
 }

@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.home.moviescope.databinding.MovieItemBinding
 import com.home.moviescope.model.Movie
-import com.home.moviescope.viewmodel.movie.MovieViewModel
 
-//Start
-//адаптер для вложенного ресайклера с фильмами
+
+/**
+ * адаптер для вложенного ресайклера с фильмами
+ */
+
 class MovieAdapter(var movieList: List<Movie>) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
@@ -26,7 +28,7 @@ class MovieAdapter(var movieList: List<Movie>) :
     inner class ViewHolder(val binding: MovieItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
-            binding.movieGenre.text = movie.genre
+            binding.movieTittle.text = movie.title
         }
 
         init {
@@ -37,7 +39,6 @@ class MovieAdapter(var movieList: List<Movie>) :
                 }
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -50,7 +51,7 @@ class MovieAdapter(var movieList: List<Movie>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        movieList?.get(position)?.let { holder.bind(it)}
+        holder.bind(movieList[position])
     }
 
     override fun getItemCount(): Int {

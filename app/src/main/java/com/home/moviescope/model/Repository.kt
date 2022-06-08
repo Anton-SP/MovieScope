@@ -4,18 +4,16 @@ class Repository:Repo {
     override fun getCategoryFromServer(): List<Category> {
         /**
          * дефолтный набор категорий
+         * как то загрузить динамически пока не представляется возможным
+         * либо прибито либо нужен механизм генерации запроса на список фильмов
+         * что то вроде фильтра
+         * но из API доступны сразу эти 4 категории на них и будем опираться
          */
         return listOf(
-            Category("Category 1"),
-            Category("Category 2"),
-            Category("Category 3"),
-            Category("Category 4"),
-            Category("Category 5"),
-            Category("Category 6"),
-            Category("Category 7"),
-            Category("Category 8"),
-            Category("Category 9"),
-            Category("Category 10")
+            Category("Now in theatres","now_playing"),
+            Category("Popular","popular"),
+            Category("Top rated","top_rated"),
+            Category("Upcoming","upcoming")
         )
     }
 }

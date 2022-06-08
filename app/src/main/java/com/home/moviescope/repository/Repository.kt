@@ -1,6 +1,8 @@
-package com.home.moviescope.model
+package com.home.moviescope.repository
 
-class Repository:Repo {
+import com.home.moviescope.model.Category
+
+class Repository: Repo {
     override fun getCategoryFromServer(): List<Category> {
         /**
          * дефолтный набор категорий

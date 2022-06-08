@@ -95,4 +95,5 @@ class CategoryAdapter(var categoryList: List<Category>, val movieModel: MovieVie
     override fun getItemCount(): Int {
         return categoryList.size
     }
+
 }

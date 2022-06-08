@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
 
     private  val receiver = MyTestBroadcastReceiver()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

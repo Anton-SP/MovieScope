@@ -16,4 +16,5 @@ data class Results(
     val genre_ids: ArrayList<Int> = arrayListOf(),
     val title: String? = null,
     val overview: String? = null,
+    val poster_path: String? = null,
 ):Parcelable
